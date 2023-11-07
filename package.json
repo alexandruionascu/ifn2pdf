@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "source": "index.html",
   "license": "MIT",
+  "homepage": "https://alexandruionascu.github.io/ifn2pdf/",
   "dependencies": {
     "@mantine/core": "^7.2.0",
     "@mantine/form": "^7.2.0",
