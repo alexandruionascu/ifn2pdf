@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html data-theme="light" style="font-size: 10px">
+  <head>
+    <title>Dogar IFN</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"
+    />
+    <script
+      lang="javascript"
+      src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://code.jquery.com/jquery-3.7.0.js"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.jsdelivr.net/npm/pdf-lib@1.4.0/dist/pdf-lib.min.js"
+    ></script>
+    <style>
+      html {
+        max-width: 38rem;
+        padding: 2rem;
+        margin: auto;
+        line-height: 1.5rem;
+        font-size: 24px;
+      }
+
+      th {
+        font-size: 12px;
+      }
+
+      input {
+        padding-left: 3rem !important;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Pas 1: Adauga fisierul Excel</h3>
+    <input type="file" id="fileInput" accept=".xlsx" />
+    <button id="loadButton">Load Excel File</button>
+    <div id="output"></div>
+
+    <h3>Pas 2: Cauta persoana dupa nume sau CNP</h3>
+    <table id="datatable" class="display" style="width: 100%">
+      <!-- Table headers and body will be populated with data programmatically -->
+    </table>
+
+    <h3>Pas 3: Verifica si completeaza formularul</h3>
+    <div id="form"></div>
+
+    <h3>Pas 4: Genereaza contract PDF</h3>
+    <input type="file" id="pdfInput" accept=".pdf" />
+    <button id="previewButton">Preview PDF</button>
+    <br />
+    <div id="canvasContainer" style="position: relative">
+      <canvas
+        id="pdfCanvas"
+        width="495"
+        height="700"
+        style="
+          border: 3px solid color(srgb 0.0627 0.5853 0.7579);
+          display: block;
+          margin: 0px;
+          padding: 0px;
+        "
+      ></canvas>
+    </div>
+    <br />
+    <button id="addTextButton">Add Custom Text</button>
+    <textarea id="customText" placeholder="Enter custom text"></textarea>
+
+    <script>
+      var dataTable;
+      console.log(PDFLib);
+      var formTemplate = [
+        {
+          name: "Nr Contract",
+          coords: [0, 0],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("G");
+            return row[idx].split("-")[0].trim();
+          },
+        },
+        {
+          name: "din",
+          coords: [0, 0],
+          break: true,
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("G");
+            return row[idx].split("-")[1].trim();
+          },
+        },
+        {
+          name: "Nume debitor",
+          col: "A",
+          coords: [567, 646],
+        },
+        {
+          name: "CNP",
+          col: "B",
+          letterSpacing: 80,
+          coords: [260, 726],
+        },
+        {
+          name: "Judet",
+          col: "E",
+          coords: [1890, 725],
+        },
+        {
+          name: "Localitatea",
+          coords: [354, 800],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("F");
+            let addr = parseAddress(row[idx]);
+            return addr["city"];
+          },
+        },
+        {
+          name: "Strada",
+          coords: [920, 800],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("F");
+            let addr = parseAddress(row[idx]);
+            return addr["street"];
+          },
+        },
+        {
+          name: "Numarul strazii",
+          coords: [1320, 800],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("F");
+            let addr = parseAddress(row[idx]);
+            return addr["streetNo"];
+          },
+        },
+        {
+          name: "Bloc",
+          coords: [0, 0],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("F");
+            let addr = parseAddress(row[idx]);
+            return addr["block"];
+          },
+        },
+        {
+          name: "Scara",
+          coords: [0, 0],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("F");
+            let addr = parseAddress(row[idx]);
+            return addr["staircase"];
+          },
+        },
+        {
+          name: "Apartament",
+          coords: [0, 0],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("F");
+            let addr = parseAddress(row[idx]);
+            return addr["apartment"];
+          },
+        },
+        {
+          name: "Legitimat cu",
+          coords: [571, 870],
+          fn: (_) => "CI",
+        },
+        {
+          name: "Serie CI",
+          coords: [845, 870],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("C");
+            return row[idx].split(".")[0].trim();
+          },
+        },
+        {
+          name: "Nr CI",
+          coords: [1105, 870],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("C");
+            return row[idx].split(".")[1].trim();
+          },
+        },
+        {
+          name: "Eliberat de",
+          coords: [1748, 870],
+          break: true,
+          col: "D",
+        },
+        {
+          name: "Valoare imprumut",
+          coords: [1285, 945],
+          placeholder: "Completeaza suma",
+          change: (newVal) => {
+            $("#Amplatitsumade").val(newVal);
+            $("#Amplatitsumadeinscris").val(
+              generateWords(parseFloat(newVal)).toLocaleUpperCase()
+            );
+          },
+        },
+        {
+          name: "Nr zile",
+          placeholder: "Completeaza numarul",
+          coords: [710, 1225],
+        },
+        {
+          name: "Data scadenta",
+          placeholder: "Completeaza data",
+          coords: [1005, 1225],
+        },
+        {
+          name: "Comision",
+          placeholder: "Completeaza comisionul",
+          coords: [1500, 1225],
+        },
+        {
+          name: "Suma de restituit",
+          placeholder: "Completeaza suma",
+          coords: [1945, 1225],
+        },
+        {
+          name: "Garantii",
+          coords: [242, 1375],
+          type: "textarea",
+          fn: (rows) => {
+            let garantii = [];
+            for (let i = 0; i < Math.min(rows.length, 5); i++) {
+              garantii.push(
+                `${rows[i][colToIdx("I")]} - ${rows[i][colToIdx("K")]} - ${
+                  rows[i][colToIdx("J")]
+                }g`
+              );
+            }
+            let res = garantii.join("\n");
+            if (rows.length > 5) {
+              res += "\n" + ".............";
+            }
+            return res;
+          },
+        },
+        {
+          name: "Dispozitie de plata numarul",
+          coords: [805, 1686],
+          placeholder: "Completeaza",
+        },
+        {
+          name: "Dispozitie de plata din",
+          coords: [0, 0],
+          fn: (rows) => {
+            let row = rows[0];
+            let idx = colToIdx("G");
+            return row[idx].split("-")[1].trim();
+          },
+        },
+        {
+          name: "Am platit suma de",
+          coords: [0, 0],
+          readonly: true,
+          fn: (rows) => {
+            return $("#Valoareimprumut").val();
+          },
+        },
+        {
+          name: "Am platit suma de in scris",
+          coords: [0, 0],
+          fn: (rows) => {
+            return generateWords(
+              parseFloat($("#Valoareimprumut").val())
+            ).toLocaleUpperCase();
+          },
+        },
+      ];
+
+      for (let field of formTemplate) {
+        let element = field.type ? field.type : "input";
+        let placeholder = field.placeholder ? field.placeholder : "Generat";
+        let id = field.name.replace(/ /g, "");
+        /*$("#form").append(
+          `<div><label>${field.name}</label><${element} id=${id} placeholder=${placeholder}></${element}></div>`
+        );*/
+
+        $("#canvasContainer").append(
+          `<div style="position: absolute; left: ${
+            field.coords[0] / 5
+          }px; top: ${
+            field.coords[1] / 5 - 12
+          }px"><${element} id='${id}' style="font-size: 8px; padding: 0px !important; border: none; margin: 0;" placeholder=${placeholder}></${element}></div></div>`
+        );
+        if (field.break) {
+          $("#form").append('<hr style="margin: 3rem !important" />');
+        }
+        if (field.change) {
+          $("#" + id).on("input", function () {
+            field.change($(this).val());
+          });
+        }
+
+        if (field.readonly) {
+          $("#" + id).attr("readonly", "readonly");
+        }
+      }
+
+      document
+        .getElementById("loadButton")
+        .addEventListener("click", function () {
+          const fileInput = document.getElementById("fileInput");
+          const output = document.getElementById("output");
+
+          if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              const data = new Uint8Array(e.target.result);
+              const workbook = XLSX.read(data, {
+                type: "array",
+                cellDates: true,
+                cellText: false,
+              });
+              const firstSheetName = workbook.SheetNames[0];
+              const worksheet = workbook.Sheets[firstSheetName];
+
+              const cellValues = XLSX.utils.sheet_to_json(worksheet, {
+                header: 1,
+                raw: false,
+                dateNF: 'dd"."mm"."yyyy',
+              });
+              console.log(cellValues);
+              // discard sheet name
+              cellValues.shift();
+              const columns = cellValues.shift();
+              console.log(columns)
+
+              dataTable = new DataTable("#datatable", {
+                scrollX: true,
+                data: cellValues.filter((x) => x.length > 0),
+                columns: columns.map((x) => new Object({ title: x })),
+              });
+
+              dataTable.on("search.dt", function () {
+                updateForm(dataTable.rows({ page: "current" }).data());
+              });
+            };
+
+            reader.readAsArrayBuffer(file);
+          } else {
+            output.innerHTML =
+              "Please select an Excel (.xls) file before clicking 'Load Excel File'.";
+          }
+        });
+
+      function colToIdx(col) {
+        return col.charCodeAt(0) - "A".charCodeAt(0);
+      }
+
+      function updateForm(rows, exceptID) {
+        for (let field of formTemplate) {
+          let id = field.name.replace(/ /g, "");
+          if (id == exceptID) {
+            continue;
+          }
+          if (field.col) {
+            let idx = field.col.charCodeAt(0) - "A".charCodeAt(0);
+            if (rows.length > 0) {
+              $("#" + id).val(rows[0][idx]);
+            } else {
+              $("#" + id).val("");
+            }
+          } else if (field.fn) {
+            if (rows.length > 0) {
+              $("#" + id).val(field.fn(rows));
+            } else {
+              $("#" + id).val("");
+            }
+          }
+        }
+      }
+    </script>
+
+    <script>
+      const pdfInput = document.getElementById("pdfInput");
+      const previewButton = document.getElementById("previewButton");
+      const pdfCanvas = document.getElementById("pdfCanvas");
+      const addTextButton = document.getElementById("addTextButton");
+      const customText = document.getElementById("customText");
+
+      var pdfDoc = null;
+      let pageNum = 1;
+
+      previewButton.addEventListener("click", function () {
+        var canvas = document.getElementById("pdfCanvas");
+        var context = canvas.getContext("2d");
+        var image = new Image();
+        image.onload = function () {
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        };
+        image.src = "/contract.png";
+        return;
+        if (pdfInput.files.length > 0) {
+          const file = pdfInput.files[0];
+          const fileReader = new FileReader();
+
+          fileReader.onload = function (e) {
+            const data = new Uint8Array(e.target.result);
+            pdfjsLib.getDocument(data).promise.then(function (pdfDocument) {
+              pdfDoc = pdfDocument;
+              renderPage(pageNum);
+            });
+          };
+
+          fileReader.readAsArrayBuffer(file);
+        } else {
+          alert("Please select a PDF file before clicking 'Preview PDF'.");
+        }
+      });
+
+      function renderPage(num) {
+        pdfDoc.getPage(num).then(function (page) {
+          let desiredWidth = 2480;
+          let viewport = page.getViewport({ scale: 1 });
+          let scale = desiredWidth / viewport.width;
+          viewport = page.getViewport({ scale: scale });
+
+          var outputScale = window.devicePixelRatio || 1;
+          pdfCanvas.width = Math.floor(viewport.width);
+          pdfCanvas.height = Math.floor(viewport.height);
+          pdfCanvas.style.width = Math.floor(viewport.width / 5) + "px";
+          pdfCanvas.style.height = Math.floor(viewport.height / 5) + "px";
+
+          const canvasContext = pdfCanvas.getContext("2d");
+          page.render({
+            canvasContext,
+            viewport,
+          });
+        });
+      }
+
+      addTextButton.addEventListener("click", function () {
+        if (pdfDoc) {
+          const text = customText.value;
+          if (text) {
+            const page = pdfDoc.getPage(pageNum);
+            const canvasContext = pdfCanvas.getContext("2d");
+            for (var field of formTemplate) {
+              if (!field.coords) continue;
+              let id = field.name.replace(/ /g, "");
+              canvasContext.font = "48px Arial";
+              let text = $("#" + id).val();
+              if (field.letterSpacing) {
+                for (let i = 0; i < text.length; i++) {
+                  canvasContext.fillText(
+                    text[i],
+                    field.coords[0] + i * field.letterSpacing,
+                    field.coords[1] + 48
+                  );
+                }
+              } else {
+                canvasContext.fillText(
+                  text,
+                  field.coords[0],
+                  field.coords[1] + 48
+                );
+              }
+            }
+          } else {
+            alert("Please enter custom text before adding it to the PDF.");
+          }
+        } else {
+          alert("Please preview a PDF before adding custom text.");
+        }
+      });
+
+      function parseAddress(addr) {
+        let address = `${addr.toUpperCase()}`
+          .replace(/,/g, " ")
+          .replace(/\./g, " ")
+          .split(" ")
+          .filter((x) => x.trim().length > 0);
+
+        let addrObj = {
+          city: null,
+          street: null,
+          streetNo: null,
+          block: null,
+          staircase: null,
+          apartment: null,
+        };
+        let lastIdx = address.length;
+        for (let i = address.length - 1; i >= 1; i--) {
+          let prev = address[i];
+          let cur = address[i - 1];
+          if (cur.startsWith("SC")) {
+            addrObj["staircase"] = prev;
+            lastIdx = i - 1;
+          } else if (cur.startsWith("BL")) {
+            addrObj["block"] = prev;
+            lastIdx = i - 1;
+          } else if (cur.startsWith("AP")) {
+            addrObj["apartment"] = prev;
+            lastIdx = i - 1;
+          } else if (cur.startsWith("NR") || cur.startsWith("NUMAR")) {
+            addrObj["streetNo"] = prev;
+            lastIdx = i - 1;
+            // extra -- cus we are done
+            lastIdx--;
+          }
+        }
+
+        if (!addrObj["streetNo"] && /\d/.test(address[lastIdx - 1])) {
+          addrObj["streetNo"] = address[lastIdx - 1];
+          lastIdx--;
+          lastIdx--;
+        }
+
+        const adj = [
+          "VECHE",
+          "MIC",
+          "MARE",
+          "NOU",
+          "NOUA",
+          "LUNGA",
+          "TURCESC",
+          "ROMAN",
+          "VUIA",
+          "VLAD",
+        ];
+        let firstIdx = 0;
+
+        if (adj.indexOf(address[1].trim()) > -1) {
+          addrObj["city"] = `${address[0]} ${address[1]}`;
+          firstIdx = 2;
+        }
+
+        addrObj["street"] = "";
+        for (let i = firstIdx; i <= lastIdx; i++) {
+          addrObj["street"] = addrObj["street"] + " " + address[i];
+        }
+
+        if (addrObj["street"]) addrObj["street"] = addrObj["street"].trim();
+
+        // default case
+        if (!addrObj["city"]) {
+          addrObj["city"] = "SANNICOLAU MARE";
+        }
+
+        return addrObj;
+      }
+
+      const TEN = 10;
+      const ONE_HUNDRED = 100;
+      const ONE_THOUSAND = 1000;
+      const ONE_MILLION = 1000000;
+      const ONE_BILLION = 1000000000; //         1.000.000.000 (9)
+      const ONE_TRILLION = 1000000000000; //     1.000.000.000.000 (12)
+
+      const LESS_THAN_TWENTY = [
+        "zero",
+        "unu",
+        "doi",
+        "trei",
+        "patru",
+        "cinci",
+        "șase",
+        "șapte",
+        "opt",
+        "nouă",
+        "zece",
+        "unsprezece",
+        "doisprezece",
+        "treisprezece",
+        "paisprezece",
+        "cincisprezece",
+        "șaisprezece",
+        "șaptesprezece",
+        "optsprezece",
+        "nouăsprezece",
+      ];
+
+      const TENTHS_LESS_THAN_HUNDRED = [
+        "zero",
+        "zece",
+        "douăzeci",
+        "treizeci",
+        "patruzeci",
+        "cincizeci",
+        "șaizeci",
+        "șaptezeci",
+        "optzeci",
+        "nouăzeci",
+      ];
+
+      function generateWords(nr, words = []) {
+        let remainder = 0;
+        let word = "";
+
+        // If NaN stop and return 'NaN'
+        if (isNaN(nr)) {
+          return "NaN";
+        }
+
+        // if user go past trillion just return a warning message
+        if (nr > ONE_TRILLION - 1) {
+          return "over library limit";
+        }
+
+        // We are done, if words[] is empty than we have zero else join words,
+        // first replace() is used to prevent errors when user writes a number 100,000 instead of 100000,
+        // second replace() is used to remove extra spaces
+        if (nr === 0) {
+          return !words.length
+            ? "zero"
+            : words
+                .join(" ")
+                .replace(/,$/, "")
+                .replace(/\s{2,}/, " ");
+        }
+
+        // If negative, prepend “minus”
+        if (nr < 0) {
+          words.push("minus");
+          nr = Math.abs(nr);
+        }
+
+        switch (true) {
+          case nr < 20:
+            remainder = 0;
+            word = LESS_THAN_TWENTY[Math.trunc(nr)];
+            word += parseDecimals(nr);
+            break;
+          case nr < ONE_HUNDRED:
+            remainder = Math.trunc(nr % TEN);
+            word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
+            // In case of remainder, we need to handle it here to be able to add the “ și ”
+            if (remainder) {
+              word += " și ";
+            }
+            break;
+          case nr < ONE_THOUSAND:
+            remainder = nr % ONE_HUNDRED;
+            const hundreds = Math.floor(nr / ONE_HUNDRED);
+            switch (hundreds) {
+              case 1:
+                word = "o sută";
+                break;
+              case 2:
+                word = "două sute";
+                break;
+              default:
+                word = generateWords(hundreds) + " sute";
+            }
+            break;
+          case nr < ONE_MILLION:
+            remainder = nr % ONE_THOUSAND;
+            const thousands = Math.floor(nr / ONE_THOUSAND);
+            word = match(thousands, "o mie", "mii");
+            break;
+          case nr < ONE_BILLION:
+            remainder = nr % ONE_MILLION;
+            const millions = Math.floor(nr / ONE_MILLION);
+            word = match(millions, "un milion", "milioane");
+            break;
+          case nr < ONE_TRILLION:
+            remainder = nr % ONE_BILLION;
+            const billions = Math.floor(nr / ONE_BILLION);
+            word = match(billions, "un miliard", "miliarde");
+            break;
+        }
+        words.push(word);
+        return generateWords(remainder, words);
+      }
+
+      function parseDecimals(nr) {
+        const decimals = parseInt(nr.toFixed(2).split(".")[1], 10);
+        let word = "";
+        if (decimals > 0) {
+          word += " virgulă ";
+
+          if (decimals < 10) {
+            word += "zero ";
+          }
+          word += generateWords(decimals);
+        }
+        return word;
+      }
+
+      function match(nr, numberUnitsSingular, numberUnitsPlural) {
+        let str = "";
+
+        switch (true) {
+          case nr === 1:
+            str = numberUnitsSingular;
+            break;
+          case nr === 2:
+            str = "două " + numberUnitsPlural;
+            break;
+          case nr < 20 || (nr > 100 && nr % 100 < 20):
+            str = generateWords(nr) + " " + numberUnitsPlural;
+            break;
+          default:
+            let words = generateWords(nr);
+            if (nr % 10 === 2) {
+              words = words.replace(/doi$/, "două");
+            }
+            str = words + " de " + numberUnitsPlural;
+        }
+
+        return str;
+      }
+    </script>
+  </body>
+</html>
