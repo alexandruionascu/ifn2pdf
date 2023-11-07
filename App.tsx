@@ -209,16 +209,6 @@ export const App = () => {
 
   return (
     <div>
-      <Modal
-        opened={true}
-        onClose={() => {}}
-        title="This is a fullscreen modal"
-        fullScreen
-        radius={0}
-        transitionProps={{ transition: "fade", duration: 200 }}
-      >
-        <h5>Hey</h5>
-      </Modal>
       <ReactSpreadsheetImport
         isOpen={flowOpen}
         onClose={() => {
@@ -245,16 +235,6 @@ export const App = () => {
         }}
       />
       <DataTable data={filteredData} />
-      <Modal
-        opened={modalOpened}
-        onClose={close}
-        title="This is a fullscreen modal"
-        fullScreen
-        radius={0}
-        transitionProps={{ transition: 'fade', duration: 200 }}
-      >
-        {/* Modal content */}
-      </Modal>
     </div>
   );
 };
