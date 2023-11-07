@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "parcel",
-    "build": "parcel build"
+    "build": "parcel build index.html --public-url ./"
   },
   "devDependencies": {
     "@types/node": "^20.3.2",
