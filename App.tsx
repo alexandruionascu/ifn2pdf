@@ -3,8 +3,12 @@ import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import type { Template } from "@pdfme/common";
 import { Form } from "@pdfme/ui";
 import { generate } from "@pdfme/generator";
-import { Table } from "@mantine/core";
-import { Modal, Button } from "@mantine/core";
+import { Input, Paper, Table, Textarea } from "@mantine/core";
+import { Modal, Drawer, Button } from "@mantine/core";
+import { formTemplate } from "./formTemplate";
+import { TextInput } from "@mantine/core";
+import Split from "@uiw/react-split";
+import "@mantine/core/styles.css";
 
 // core styles are required for all packages
 
@@ -163,11 +167,10 @@ const fields = [
 ] as const;
 
 function DataTable(props: { data: any[] }) {
-  console.log(props.data);
   const rows = props.data.map((element, i) => (
     <Table.Tr key={i}>
-      {fields.map((field) => (
-        <Table.Td>{element[field.key]}</Table.Td>
+      {fields.map((field, i) => (
+        <Table.Td key={i}>{element[field.key]}</Table.Td>
       ))}
     </Table.Tr>
   ));
@@ -176,8 +179,8 @@ function DataTable(props: { data: any[] }) {
     <Table className="table">
       <Table.Thead>
         <Table.Tr className="table-data">
-          {fields.map((f) => (
-            <Table.Th key={f.label}>{f.label}</Table.Th>
+          {fields.map((f, i) => (
+            <Table.Th key={i}>{f.label}</Table.Th>
           ))}
         </Table.Tr>
       </Table.Thead>
@@ -186,7 +189,10 @@ function DataTable(props: { data: any[] }) {
   );
 }
 export const App = () => {
+  const [sizes, setSizes] = React.useState([100, "30%"]);
+
   const dbIsCached = localStorage.getItem("db");
+
   const cachedDb = JSON.parse(localStorage.getItem("db"));
   const [flowOpen, setFlowOpen] = React.useState(!dbIsCached);
   const [data, setData] = React.useState({
@@ -196,7 +202,64 @@ export const App = () => {
   });
   const [searchInput, setSearchInput] = React.useState("");
   const [filteredData, setFilteredData] = React.useState(data.all);
-  const [modalOpened, { open, close }] = useDisclosure(false); 
+  const [openned, { open, close }] = useDisclosure(false);
+  // table data
+  const current = filteredData.length > 0 ? filteredData[0] : null;
+  // computed data
+  const [currentFn, setCurrentFn] = React.useState({});
+
+  const updateFnData = (key: string, newValue: string) => {
+    if (key) {
+     let newFnData = { ...currentFn, [key]: newValue };
+      console.log(formTemplate)
+      let templateField = formTemplate.find(x => x.key == key);
+        console.log(templateField)
+      if (templateField && templateField.triggers) {
+        for (let trigger of templateField.triggers) {
+            let triggerField = formTemplate.find(x => x.key == trigger);
+            console.log('update trigger', trigger, templateField )
+          let result;
+          try {
+            result = triggerField.fn(current, newFnData);
+            console.log(result);
+          } catch (err) {
+            console.log(err);
+          } finally {
+            newFnData = {...newFnData, [trigger]: result };
+          }
+        }
+      }
+      setCurrentFn(newFnData);
+      return;
+    }
+    const newFnData = {};
+    for (let field of formTemplate) {
+      let result;
+      try {
+        result = field.fn(current, newFnData);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        newFnData[field.key] = result;
+      }
+    }
+    setCurrentFn(newFnData);
+  };
+
+  const getFormValue = (key: string) => {
+    if (!current) {
+      return "";
+    }
+    if (current[key]) {
+      return current[key];
+    }
+
+    if (currentFn[key]) {
+      return currentFn[key];
+    }
+
+    return "";
+  };
 
   React.useEffect(() => {
     setFilteredData(
@@ -204,8 +267,8 @@ export const App = () => {
         (x) => Object.values(x).join("").toLowerCase().indexOf(searchInput) > -1
       )
     );
-    open();
-  }, [searchInput]);
+    updateFnData(null, null);
+  }, [searchInput, data]);
 
   return (
     <div>
@@ -222,19 +285,76 @@ export const App = () => {
         }}
         fields={fields}
       />
-      <input
-        type="text"
-        onChange={(e) => setSearchInput(e.target.value)}
-        placeholder="Search"
-        style={{
-          padding: "0.5rem",
-          margin: "0.5rem",
-          width: "100%",
-          textAlign: "center",
-          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-        }}
-      />
-      <DataTable data={filteredData} />
+      <Split>
+        <div style={{ width: "80%", minWidth: 300 }}>
+          <TextInput
+            type="text"
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search"
+            style={{
+              width: "100%",
+              display: "block",
+              margin: "0 auto",
+              padding: "0.5rem",
+              textAlign: "center",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            }}
+          />
+          <div
+            style={{ height: "100%", overflow: "scroll", maxHeight: "100vh" }}
+          >
+            <DataTable data={filteredData} />
+          </div>
+        </div>
+        <div style={{ width: "20%", minWidth: 100 }}>
+          <Paper title="Formular Contract" position="right">
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                overflow: "scroll",
+                maxHeight: "100vh",
+              }}
+            >
+              {formTemplate.map((field, i) => (
+                <div key={i} style={{ padding: "0.5rem" }}>
+                  <Input.Wrapper description={field.key}>
+                    {field.type == "textarea" ? (
+                      <Textarea
+                        placeholder={field.placeholder}
+                        value={getFormValue(field.key)}
+                        onChange={(e) =>
+                          updateFnData(field.key, e.target.value)
+                        }
+                      />
+                    ) : (
+                      <TextInput
+                        placeholder={field.placeholder}
+                        value={getFormValue(field.key)}
+                        onChange={(e) =>
+                          updateFnData(field.key, e.target.value)
+                        }
+                      />
+                    )}
+                  </Input.Wrapper>
+                </div>
+              ))}
+              <Button
+                style={{
+                  display: "block",
+                  margin: "0 auto",
+                  marginTop: 50,
+                  marginBottom: 50,
+                }}
+                variant="filled"
+              >
+                Genereaza contract
+              </Button>
+            </div>
+          </Paper>
+        </div>
+      </Split>
     </div>
   );
 };
