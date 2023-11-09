@@ -18,7 +18,6 @@ import { useDisclosure } from "@mantine/hooks";
 const domContainer = document.getElementById("container");
 
 // This is initial data.
-const inputs = [{ cnp: "1960410375475" }];
 
 /*generate({ template, inputs }).then((pdf) => {
 
@@ -167,6 +166,7 @@ const fields = [
 ] as const;
 
 function DataTable(props: { data: any[] }) {
+  console.log(getContracts())
   const rows = props.data.map((element, i) => (
     <Table.Tr key={i}>
       {fields.map((field, i) => (
@@ -188,11 +188,31 @@ function DataTable(props: { data: any[] }) {
     </Table>
   );
 }
+
+const addContract = (newContract) => {
+  let contracts: any = localStorage.getItem("contractss");
+  if (!contracts) {
+    contracts = [];
+  } else {
+    console.log(contracts)
+    contracts = JSON.parse(newContract);
+  }
+  contracts.push(newContract);
+  localStorage.setItem("contractss", JSON.stringify(contracts));
+};
+
+const getContracts = () => {
+  let contracts: any = localStorage.getItem("contractss");
+  if (!contracts) {
+    return [];
+  }
+
+  return JSON.parse(contracts);
+};
+
 export const App = () => {
-  const [sizes, setSizes] = React.useState([100, "30%"]);
-
   const dbIsCached = localStorage.getItem("db");
-
+  const mode = "contract";
   const cachedDb = JSON.parse(localStorage.getItem("db"));
   const [flowOpen, setFlowOpen] = React.useState(!dbIsCached);
   const [data, setData] = React.useState({
@@ -207,17 +227,47 @@ export const App = () => {
   const current = filteredData.length > 0 ? filteredData[0] : null;
   // computed data
   const [currentFn, setCurrentFn] = React.useState({});
+  let inputs = {};
+
+  const formKeys = formTemplate.map((x) => x.key);
+  for (let key of formKeys) {
+    let field = formTemplate.find((x) => x.key == key);
+    let value;
+    if (field.fn) {
+      value = currentFn[key];
+    } else {
+      value = current[key];
+    }
+
+    inputs[key] = value;
+    console.log("key", key, "value", value);
+    if (field.alias) {
+      for (let alias of field.alias) {
+        inputs[alias] = value;
+      }
+    }
+
+    if (!inputs[key]) {
+      inputs[key] = "";
+    }
+  }
+  inputs["VALOARE IMPRUMUT"] = "1234";
+  inputs["VALOARE IMPRUMUT1"] = "1234";
+  inputs["VALOARE IMPRUMUT2"] = "1234";
+  inputs["VALOARE IMPRUMUT3"] = "1234";
+
+  inputs = [inputs];
+  console.log(inputs);
 
   const updateFnData = (key: string, newValue: string) => {
     if (key) {
-     let newFnData = { ...currentFn, [key]: newValue };
-      console.log(formTemplate)
-      let templateField = formTemplate.find(x => x.key == key);
-        console.log(templateField)
+      console.log("update key", key);
+      let newFnData = { ...currentFn, [key]: newValue };
+      let templateField = formTemplate.find((x) => x.key == key);
       if (templateField && templateField.triggers) {
         for (let trigger of templateField.triggers) {
-            let triggerField = formTemplate.find(x => x.key == trigger);
-            console.log('update trigger', trigger, templateField )
+          let triggerField = formTemplate.find((x) => x.key == trigger);
+          console.log("update trigger", trigger, templateField);
           let result;
           try {
             result = triggerField.fn(current, newFnData);
@@ -225,10 +275,11 @@ export const App = () => {
           } catch (err) {
             console.log(err);
           } finally {
-            newFnData = {...newFnData, [trigger]: result };
+            newFnData = { ...newFnData, [trigger]: result };
           }
         }
       }
+      console.log(newFnData);
       setCurrentFn(newFnData);
       return;
     }
@@ -270,6 +321,9 @@ export const App = () => {
     updateFnData(null, null);
   }, [searchInput, data]);
 
+  if (mode == "contracts") {
+    return (<DataTable data={getContracts()} />)
+  }
   return (
     <div>
       <ReactSpreadsheetImport
@@ -348,6 +402,15 @@ export const App = () => {
                   marginBottom: 50,
                 }}
                 variant="filled"
+                onClick={() => {
+                  addContract(inputs[0])
+                  generate({ template, inputs }).then((pdf) => {
+                    const blob = new Blob([pdf.buffer], {
+                      type: "application/pdf",
+                    });
+                    window.open(URL.createObjectURL(blob));
+                  });
+                }}
               >
                 Genereaza contract
               </Button>

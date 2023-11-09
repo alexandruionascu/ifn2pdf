@@ -12,6 +12,7 @@ export const formTemplate = [
   {
     key: "DIN",
     coords: [0, 0],
+    alias: ["DIN1", "DIN2"],
     break: true,
     fn: (row, formData) => {
       return row["NR CONTRACT / DATA"].split("-")[1].trim();
@@ -19,6 +20,7 @@ export const formTemplate = [
   },
   {
     key: "NUME",
+    alias: ["NUME1"],
     col: "A",
     coords: [567, 646],
   },
@@ -83,11 +85,13 @@ export const formTemplate = [
   },
   {
     key: "LEGITIMAT CU",
+    alias: ["LEGITIMAT CU1"],
     coords: [571, 870],
     fn: (_) => "CI",
   },
   {
     key: "SERIE CI",
+    alias: ["SERIE CI1"],
     coords: [845, 870],
     fn: (row, _) => {
       return row["ACT IDENTITATE"].split(".")[0].trim();
@@ -95,6 +99,7 @@ export const formTemplate = [
   },
   {
     key: "NR CI",
+    alias: ["NR CI1"],
     coords: [1105, 870],
     fn: (row, _) => {
       return row["ACT IDENTITATE"].split(".")[1].trim();
@@ -107,61 +112,8 @@ export const formTemplate = [
     col: "D",
   },
   {
-    key: "NR ZILE",
-    placeholder: "Completeaza numarul",
-    coords: [710, 1225],
-  },
-  {
-    key: "DATA SCADENTA",
-    placeholder: "Completeaza data",
-    coords: [1005, 1225],
-  },
-  {
-    key: "COMISION",
-    placeholder: "Completeaza comisionul",
-    coords: [1500, 1225],
-  },
-  {
-    key: "SUMA DE RESTITUIT",
-    placeholder: "Completeaza suma",
-    coords: [1945, 1225],
-  },
-  {
-    key: "GARANTII",
-    coords: [242, 1375],
-    type: "textarea",
-    fn: (rows) => {
-      let garantii = [];
-      for (let i = 0; i < Math.min(rows.length, 5); i++) {
-        garantii.push(
-          `${rows[i][colToIdx("I")]} - ${rows[i][colToIdx("K")]} - ${
-            rows[i][colToIdx("J")]
-          }g`
-        );
-      }
-      let res = garantii.join("\n");
-      if (rows.length > 5) {
-        res += "\n" + ".............";
-      }
-      return res;
-    },
-  },
-  {
-    key: "DISPOZITIE DE PLATA NUMARUL",
-    coords: [805, 1686],
-    placeholder: "Completeaza",
-  },
-  {
-    key: "DISPOZITIE DE PLATA DIN",
-    coords: [0, 0],
-    fn: (rows) => {
-      let row = rows[0];
-      let idx = colToIdx("G");
-      return row[idx].split("-")[1].trim();
-    },
-  },
-  {
     key: "VALOARE IMPRUMUT",
+    alias: ["VALOARE IMPRUMUT1", "VALOARE IMPRUMUT2", "VALOARE IMPRUMUT3"],
     coords: [1285, 945],
     placeholder: "Completeaza suma",
     triggers: ["AM PLATIT SUMA DE", "AM PLATIT SUMA DE IN SCRIS"]
@@ -180,7 +132,60 @@ export const formTemplate = [
     fn: (row, formData) => {
       return generateWords(
         parseFloat(formData["VALOARE IMPRUMUT"])
-      ).toLocaleUpperCase();
+      ).toLocaleUpperCase() + " LEI";
     },
   },
+  {
+    key: "DATA SCADENTA",
+
+    placeholder: "Completeaza data",
+    coords: [1005, 1225],
+  },
+  {
+    key: "NR ZILE",
+        // data din  data scadenta - contract = nr zile
+        // validare daca e duminica
+    placeholder: "Completeaza numarul",
+    coords: [710, 1225],
+    fn: (row, formData) => {
+      //return (new Date(formData["DATA SCADENTA"] - new Date(formData["DIN"]).days;
+    }
+  },
+
+  {
+    key: "COMISION",
+    placeholder: "Completeaza comisionul",
+    coords: [1500, 1225],
+  },
+  {
+    key: "SUMA DE RESTITUIT",
+    placeholder: "Completeaza suma",
+    coords: [1945, 1225],
+  },
+  {
+    key: "GARANTII",
+    coords: [242, 1375],
+    type: "textarea",
+    fn: (rows) => {
+     /*let garantii = [];
+      for (let i = 0; i < Math.min(rows.length, 5); i++) {
+        garantii.push(
+          `${rows[i][colToIdx("I")]} - ${rows[i][colToIdx("K")]} - ${
+            rows[i][colToIdx("J")]
+          }g`
+        );
+      }
+      let res = garantii.join("\n");
+      if (rows.length > 5) {
+        res += "\n" + ".............";
+      }
+      return res;*/
+    },
+  },
+  {
+    key: "DISPOZITIE DE PLATA NUMARUL",
+    coords: [805, 1686],
+    placeholder: "Completeaza",
+  },
+  
 ];

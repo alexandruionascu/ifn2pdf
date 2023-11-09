@@ -171,7 +171,7 @@ export function generateWords(nr, words = []) {
       const hundreds = Math.floor(nr / ONE_HUNDRED);
       switch (hundreds) {
         case 1:
-          word = "o suta";
+          word = "una suta";
           break;
         case 2:
           word = "doua sute";
@@ -183,7 +183,7 @@ export function generateWords(nr, words = []) {
     case nr < ONE_MILLION:
       remainder = nr % ONE_THOUSAND;
       const thousands = Math.floor(nr / ONE_THOUSAND);
-      word = match(thousands, "o mie", "mii");
+      word = match(thousands, "una mie", "mii");
       break;
     case nr < ONE_BILLION:
       remainder = nr % ONE_MILLION;

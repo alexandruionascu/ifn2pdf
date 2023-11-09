@@ -11,6 +11,7 @@
     "@mantine/notifications": "^7.2.0",
     "@pdfme/common": "^3.0.1",
     "@pdfme/generator": "^3.0.1",
+    "@pdfme/schemas": "^3.0.1",
     "@pdfme/ui": "^3.0.1",
     "@uiw/react-split": "^5.9.1",
     "allotment": "^1.19.3",
@@ -24,6 +25,7 @@
     "build": "parcel build index.html --public-url ./"
   },
   "devDependencies": {
+    "@parcel/bundler-experimental": "^2.7.0",
     "@types/node": "^20.3.2",
     "@types/react": "^18.2.36",
     "@types/react-dom": "^18.2.14",
