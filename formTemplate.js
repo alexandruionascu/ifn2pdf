@@ -94,6 +94,7 @@ export const formTemplate = [
     alias: ["SERIE CI1"],
     coords: [845, 870],
     fn: (row, _) => {
+      return "";
       return row["ACT IDENTITATE"].split(".")[0].trim();
     },
   },
@@ -102,6 +103,7 @@ export const formTemplate = [
     alias: ["NR CI1"],
     coords: [1105, 870],
     fn: (row, _) => {
+      return "";
       return row["ACT IDENTITATE"].split(".")[1].trim();
     },
   },
@@ -148,10 +150,10 @@ export const formTemplate = [
     placeholder: "Completeaza numarul",
     coords: [710, 1225],
     fn: (row, formData) => {
+      return "";
       //return (new Date(formData["DATA SCADENTA"] - new Date(formData["DIN"]).days;
     }
   },
-
   {
     key: "COMISION",
     placeholder: "Completeaza comisionul",

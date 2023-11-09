@@ -29,13 +29,6 @@ const domContainer = document.getElementById("container");
 
 //const form = new Form({ domContainer, template, inputs });
 
-const elements = [
-  { position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-  { position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-  { position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
-  { position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
-  { position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
-];
 const fields = [
   {
     label: "NUME",
@@ -166,7 +159,7 @@ const fields = [
 ] as const;
 
 function DataTable(props: { data: any[] }) {
-  console.log(getContracts())
+  console.log(getContracts());
   const rows = props.data.map((element, i) => (
     <Table.Tr key={i}>
       {fields.map((field, i) => (
@@ -194,7 +187,7 @@ const addContract = (newContract) => {
   if (!contracts) {
     contracts = [];
   } else {
-    console.log(contracts)
+    console.log(contracts);
     contracts = JSON.parse(newContract);
   }
   contracts.push(newContract);
@@ -212,7 +205,6 @@ const getContracts = () => {
 
 export const App = () => {
   const dbIsCached = localStorage.getItem("db");
-  const mode = "contract";
   const cachedDb = JSON.parse(localStorage.getItem("db"));
   const [flowOpen, setFlowOpen] = React.useState(!dbIsCached);
   const [data, setData] = React.useState({
@@ -287,8 +279,10 @@ export const App = () => {
     for (let field of formTemplate) {
       let result;
       try {
-        result = field.fn(current, newFnData);
+        if (current) result = field.fn(current, newFnData);
+        else result = null;
       } catch (err) {
+        console.log("error", field);
         console.log(err);
       } finally {
         newFnData[field.key] = result;
@@ -321,9 +315,6 @@ export const App = () => {
     updateFnData(null, null);
   }, [searchInput, data]);
 
-  if (mode == "contracts" && false) {
-    return (<DataTable data={getContracts()} />)
-  }
   return (
     <div>
       <ReactSpreadsheetImport
@@ -403,7 +394,7 @@ export const App = () => {
                 }}
                 variant="filled"
                 onClick={() => {
-                  //addContract(inputs[0])
+                  console.log("test");
                   generate({ template, inputs }).then((pdf) => {
                     const blob = new Blob([pdf.buffer], {
                       type: "application/pdf",
