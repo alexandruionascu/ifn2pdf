@@ -223,6 +223,7 @@ export const App = () => {
 
   const formKeys = formTemplate.map((x) => x.key);
   for (let key of formKeys) {
+    if (!current) continue;
     let field = formTemplate.find((x) => x.key == key);
     let value;
     if (field.fn) {
