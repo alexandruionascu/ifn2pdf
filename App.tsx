@@ -321,7 +321,7 @@ export const App = () => {
     updateFnData(null, null);
   }, [searchInput, data]);
 
-  if (mode == "contracts") {
+  if (mode == "contracts" && false) {
     return (<DataTable data={getContracts()} />)
   }
   return (
@@ -403,7 +403,7 @@ export const App = () => {
                 }}
                 variant="filled"
                 onClick={() => {
-                  addContract(inputs[0])
+                  //addContract(inputs[0])
                   generate({ template, inputs }).then((pdf) => {
                     const blob = new Blob([pdf.buffer], {
                       type: "application/pdf",
