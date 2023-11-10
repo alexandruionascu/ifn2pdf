@@ -8,6 +8,8 @@ import { Modal, Drawer, Button } from "@mantine/core";
 import { formTemplate } from "./formTemplate";
 import { TextInput } from "@mantine/core";
 import Split from "@uiw/react-split";
+import { Navbar } from "./components/Navbar";
+import './App.css';
 import "@mantine/core/styles.css";
 
 // core styles are required for all packages
@@ -285,129 +287,139 @@ export const App = () => {
   }, [searchInput, data]);
 
   return (
-    <div>
-      <ReactSpreadsheetImport
-        isOpen={flowOpen}
-        onClose={() => {
-          setFlowOpen(false);
-        }}
-        onSubmit={(data, file) => {
-          setData(data);
-          const dbAsStr = JSON.stringify(data);
-          localStorage.setItem("db", dbAsStr);
-          setFlowOpen(false);
-        }}
-        fields={fields}
-      />
-      <Split>
-        <div style={{ width: "80%", minWidth: 300 }}>
-          <TextInput
-            type="text"
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search"
-            style={{
-              width: "100%",
-              display: "block",
-              margin: "0 auto",
-              padding: "0.5rem",
-              textAlign: "center",
-              paddingLeft: "10px",
-              paddingRight: "10px",
-            }}
-          />
-          <div
-            style={{ height: "100%", overflow: "scroll", maxHeight: "100vh" }}
-          >
-            <DataTable data={filteredData} />
-          </div>
-        </div>
-        <div style={{ width: "20%", minWidth: 100 }}>
-          <Paper title="Formular Contract" position="right">
-            <div
+    <div style={{display: 'flex', height: '100%'}}>
+      <Navbar />
+      <div style={{height: '100%'}}>
+        <ReactSpreadsheetImport
+          isOpen={flowOpen}
+          onClose={() => {
+            setFlowOpen(false);
+          }}
+          onSubmit={(data, file) => {
+            setData(data);
+            const dbAsStr = JSON.stringify(data);
+            localStorage.setItem("db", dbAsStr);
+            setFlowOpen(false);
+          }}
+          fields={fields}
+        />
+        <Split>
+          <div style={{ width: "calc(80% - 80px)", minWidth: 300 }}>
+            <TextInput
+              type="text"
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search"
               style={{
                 width: "100%",
-                height: "100%",
-                overflow: "scroll",
-                maxHeight: "100vh",
+                display: "block",
+                margin: "0 auto",
+                padding: "0.5rem",
+                textAlign: "center",
+                paddingLeft: "10px",
+                paddingRight: "10px",
               }}
+            />
+            <div
+              style={{ height: "100%", overflow: "scroll", maxHeight: "100vh" }}
             >
-              {formTemplate.map((field, i) => (
-                <div key={i} style={{ padding: "0.5rem" }}>
-                  <Input.Wrapper description={field.key}>
-                    {field.type == "textarea" ? (
-                      <Textarea
-                        placeholder={field.placeholder}
-                        value={getFormValue(field.key)}
-                        onChange={(e) =>
-                          updateFnData(field.key, e.target.value)
-                        }
-                      />
-                    ) : (
-                      <TextInput
-                        placeholder={field.placeholder}
-                        value={getFormValue(field.key)}
-                        onChange={(e) =>
-                          updateFnData(field.key, e.target.value)
-                        }
-                      />
-                    )}
-                  </Input.Wrapper>
-                </div>
-              ))}
-              <Button
+              <DataTable data={filteredData} />
+            </div>
+          </div>
+          <div style={{ width: "calc(20% - 30px)", minWidth: 100 }}>
+            <Paper title="Formular Contract" position="right">
+              <div
                 style={{
-                  display: "block",
-                  margin: "0 auto",
-                  marginTop: 50,
-                  marginBottom: 50,
+                  width: "100%",
+                  height: "100%",
+                  overflow: "scroll",
+                  maxHeight: "100vh",
                 }}
-                variant="filled"
-                onClick={() => {
-                  let inputs = {};
-                  console.log(current, currentFn)
-                  const formKeys = formTemplate.map((x) => x.key);
-                  for (let key of formKeys) {
-                    if (!current) continue;
-                    let field = formTemplate.find((x) => x.key == key);
-                    let value;
-                    if (field.fn || currentFn[key])  {
-                      value = currentFn[key];
-                    } else {
-                      value = current[key];
-                    }
+              >
+                {formTemplate.map((field, i) => (
+                  <div key={i} style={{ padding: "0.5rem" }}>
+                    <Input.Wrapper description={field.key}>
+                      {field.type == "textarea" ? (
+                        <Textarea
+                          placeholder={field.placeholder}
+                          value={getFormValue(field.key)}
+                          onChange={(e) =>
+                            updateFnData(field.key, e.target.value)
+                          }
+                        />
+                      ) : (
+                        <TextInput
+                          placeholder={field.placeholder}
+                          value={getFormValue(field.key)}
+                          onChange={(e) =>
+                            updateFnData(field.key, e.target.value)
+                          }
+                        />
+                      )}
+                    </Input.Wrapper>
+                  </div>
+                ))}
+                <Button
+                  style={{
+                    display: "block",
+                    margin: "0 auto",
+                    marginTop: 50,
+                    marginBottom: 50,
+                  }}
+                  variant="filled"
+                  onClick={() => {
+                    let inputs = {};
+                    console.log(current, currentFn);
+                    const formKeys = formTemplate.map((x) => x.key);
+                    for (let key of formKeys) {
+                      if (!current) continue;
+                      let field = formTemplate.find((x) => x.key == key);
+                      let value;
+                      if (field.fn || currentFn[key]) {
+                        value = currentFn[key];
+                      } else {
+                        value = current[key];
+                      }
 
-                    inputs[key] = value;
-                    console.log("key", key, "value", value, currentFn[key], current[key]);
-                    if (field.alias) {
-                      for (let alias of field.alias) {
-                        inputs[alias] = value;
-                        if (!inputs[alias]) {
-                          inputs[alias] = "";
+                      inputs[key] = value;
+                      console.log(
+                        "key",
+                        key,
+                        "value",
+                        value,
+                        currentFn[key],
+                        current[key]
+                      );
+                      if (field.alias) {
+                        for (let alias of field.alias) {
+                          inputs[alias] = value;
+                          if (!inputs[alias]) {
+                            inputs[alias] = "";
+                          }
                         }
+                      }
+
+                      if (!inputs[key]) {
+                        inputs[key] = "";
                       }
                     }
 
-                    if (!inputs[key]) {
-                      inputs[key] = "";
-                    }
-                  }
-
-                  inputs = [inputs];
-                  console.log(inputs);
-                  generate({ template, inputs }).then((pdf) => {
-                    const blob = new Blob([pdf.buffer], {
-                      type: "application/pdf",
+                    inputs = [inputs];
+                    console.log(inputs);
+                    generate({ template, inputs }).then((pdf) => {
+                      const blob = new Blob([pdf.buffer], {
+                        type: "application/pdf",
+                      });
+                      window.open(URL.createObjectURL(blob));
                     });
-                    window.open(URL.createObjectURL(blob));
-                  });
-                }}
-              >
-                Genereaza contract
-              </Button>
-            </div>
-          </Paper>
-        </div>
-      </Split>
+                  }}
+                >
+                  Genereaza contract
+                </Button>
+              </div>
+            </Paper>
+          </div>
+        </Split>
+      </div>
     </div>
   );
 };

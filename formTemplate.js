@@ -117,7 +117,11 @@ export const formTemplate = [
     alias: ["VALOARE IMPRUMUT1", "VALOARE IMPRUMUT2", "VALOARE IMPRUMUT3"],
     coords: [1285, 945],
     placeholder: "Completeaza suma",
-    triggers: ["AM PLATIT SUMA DE", "VALOARE IMPRUMUT IN SCRIS"]
+    triggers: [
+      "SUMA DE RESTITUIT",
+      "AM PLATIT SUMA DE",
+      "VALOARE IMPRUMUT IN SCRIS",
+    ],
   },
   {
     key: "AM PLATIT SUMA DE",
@@ -131,9 +135,11 @@ export const formTemplate = [
     key: "VALOARE IMPRUMUT IN SCRIS",
     coords: [0, 0],
     fn: (row, formData) => {
-      return generateWords(
-        parseFloat(formData["VALOARE IMPRUMUT"])
-      ).toLocaleUpperCase() + " LEI";
+      return (
+        generateWords(
+          parseFloat(formData["VALOARE IMPRUMUT"])
+        ).toLocaleUpperCase() + " LEI"
+      );
     },
   },
   {
@@ -144,31 +150,35 @@ export const formTemplate = [
   },
   {
     key: "NR ZILE",
-        // data din  data scadenta - contract = nr zile
-        // validare daca e duminica
+    // data din  data scadenta - contract = nr zile
+    // validare daca e duminica
     placeholder: "Completeaza numarul",
     coords: [710, 1225],
     fn: (row, formData) => {
       return "30";
       //return (new Date(formData["DATA SCADENTA"] - new Date(formData["DIN"]).days;
-    }
+    },
   },
   {
     key: "COMISION",
     placeholder: "Completeaza comisionul",
     coords: [1500, 1225],
+    triggers: ["SUMA DE RESTITUIT"],
   },
   {
     key: "SUMA DE RESTITUIT",
     placeholder: "Completeaza suma",
     coords: [1945, 1225],
+    fn: (row, formData) => {
+      return (parseFloat(formData["COMISION"]) + parseFloat(formData["VALOARE IMPRUMUT"])).toString();
+    },
   },
   {
     key: "GARANTII",
     coords: [242, 1375],
     type: "textarea",
     fn: (rows) => {
-     /*let garantii = [];
+      /*let garantii = [];
       for (let i = 0; i < Math.min(rows.length, 5); i++) {
         garantii.push(
           `${rows[i][colToIdx("I")]} - ${rows[i][colToIdx("K")]} - ${
@@ -188,5 +198,4 @@ export const formTemplate = [
     coords: [805, 1686],
     placeholder: "Completeaza",
   },
-  
 ];
