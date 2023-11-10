@@ -17,6 +17,7 @@ var merge__default = /*#__PURE__*/_interopDefaultLegacy(merge);
 const defaultTheme = theme.themeOverrides;
 const defaultRSIProps = {
     autoMapHeaders: true,
+    autoMapSelectValues: false,
     allowInvalidSubmit: true,
     autoMapDistance: 2,
     translations: translationsRSIProps.translations,

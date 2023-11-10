@@ -1,0 +1,70 @@
+Arguments: 
+  /usr/local/Cellar/node/18.10.0/bin/node /usr/local/Cellar/yarn/1.22.18/libexec/bin/yarn.js
+
+PATH: 
+  /opt/homebrew/opt/openjdk/bin:/Users/alexandruionascu/.bun/bin:/Users/alexandruionascu/opt/anaconda3/bin:/Volumes/Samsung_T5/Workspace/AndroidSDK/tools:/Volumes/Samsung_T5/Workspace/AndroidSDK/platform-tools:/Volumes/Samsung_T5/Workspace/AndroidSDK:/Volumes/Samsung_T5/cocos2d-x-4.0/templates:/Volumes/Samsung_T5:/Volumes/Samsung_T5/cocos2d-x-4.0/tools/cocos2d-console/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/opt/openjdk/bin:/Users/alexandruionascu/.bun/bin:/Users/alexandruionascu/opt/anaconda3/bin:/Volumes/Samsung_T5/Workspace/AndroidSDK/tools:/Volumes/Samsung_T5/Workspace/AndroidSDK/platform-tools:/Volumes/Samsung_T5/Workspace/AndroidSDK:/Volumes/Samsung_T5/cocos2d-x-4.0/templates:/Volumes/Samsung_T5:/Volumes/Samsung_T5/cocos2d-x-4.0/tools/cocos2d-console/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Volumes/Samsung_T5/Workspace/AndroidSDK/emulator:/Volumes/Samsung_T5/Workspace/AndroidSDK/tools/bin:/Volumes/Samsung_T5/Workspace/flutter/bin:/Volumes/Samsung_T5/Workspace/AndroidSDK/emulator:/Volumes/Samsung_T5/Workspace/AndroidSDK/tools:/Volumes/Samsung_T5/Workspace/AndroidSDK/tools/bin:/Volumes/Samsung_T5/Workspace/AndroidSDK/platform-tools:/Volumes/Samsung_T5/Workspace/flutter/bin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  18.10.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/alexandruionascu/Workspace/dogar_ifn/package.json: Unexpected token } in JSON at position 667
+      at JSON.parse (<anonymous>)
+      at /usr/local/Cellar/yarn/1.22.18/libexec/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/Cellar/yarn/1.22.18/libexec/lib/cli.js:310:30)
+      at /usr/local/Cellar/yarn/1.22.18/libexec/lib/cli.js:321:13
+
+npm manifest: 
+  {
+      "name": "vite-min-template",
+      "private": true,
+      "version": "0.0.0",
+      "type": "module",
+      "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview"
+      },
+      "dependencies": {
+        "@mantine/core": "7.2.1",
+        "@mantine/hooks": "7.2.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-spreadsheet-import": "^4.3.0",
+        "@pdfme/common": "^3.0.1",
+        "@pdfme/generator": "^3.0.1",
+        "@pdfme/schemas": "^3.0.1",
+        "@pdfme/ui": "^3.0.1",
+        "@uiw/react-split": "^5.9.1",
+      },
+      "devDependencies": {
+        "@types/react": "^18.2.36",
+        "@types/react-dom": "^18.2.14",
+        "@typescript-eslint/eslint-plugin": "^6.9.1",
+        "@typescript-eslint/parser": "^6.9.1",
+        "@vitejs/plugin-react": "^4.1.1",
+        "eslint": "^8.53.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.4",
+        "postcss": "^8.4.31",
+        "postcss-preset-mantine": "1.10.0",
+        "postcss-simple-vars": "^7.0.1",
+        "typescript": "^5.2.2",
+        "vite": "^4.5.0"
+      },
+      "packageManager": "yarn@4.0.1"
+    }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

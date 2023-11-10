@@ -9,6 +9,7 @@ import { translations } from './translationsRSIProps.js';
 const defaultTheme = themeOverrides;
 const defaultRSIProps = {
     autoMapHeaders: true,
+    autoMapSelectValues: false,
     allowInvalidSubmit: true,
     autoMapDistance: 2,
     translations: translations,

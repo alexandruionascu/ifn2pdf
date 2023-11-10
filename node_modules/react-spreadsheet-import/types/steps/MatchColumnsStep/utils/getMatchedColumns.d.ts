@@ -37,4 +37,4 @@ export declare const getMatchedColumns: <T extends string>(columns: Columns<T>, 
         readonly type: "input";
     };
     readonly example?: string | undefined;
-}[], data: import("../../../types").RawData[], autoMapDistance: number) => Column<T>[];
+}[], data: import("../../../types").RawData[], autoMapDistance: number, autoMapSelectValues?: boolean) => Column<T>[];

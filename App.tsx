@@ -219,38 +219,6 @@ export const App = () => {
   const current = filteredData.length > 0 ? filteredData[0] : null;
   // computed data
   const [currentFn, setCurrentFn] = React.useState({});
-  let inputs = {};
-
-  const formKeys = formTemplate.map((x) => x.key);
-  for (let key of formKeys) {
-    if (!current) continue;
-    let field = formTemplate.find((x) => x.key == key);
-    let value;
-    if (field.fn) {
-      value = currentFn[key];
-    } else {
-      value = current[key];
-    }
-
-    inputs[key] = value;
-    console.log("key", key, "value", value);
-    if (field.alias) {
-      for (let alias of field.alias) {
-        inputs[alias] = value;
-      }
-    }
-
-    if (!inputs[key]) {
-      inputs[key] = "";
-    }
-  }
-  inputs["VALOARE IMPRUMUT"] = "1234";
-  inputs["VALOARE IMPRUMUT1"] = "1234";
-  inputs["VALOARE IMPRUMUT2"] = "1234";
-  inputs["VALOARE IMPRUMUT3"] = "1234";
-
-  inputs = [inputs];
-  console.log(inputs);
 
   const updateFnData = (key: string, newValue: string) => {
     if (key) {
@@ -395,7 +363,37 @@ export const App = () => {
                 }}
                 variant="filled"
                 onClick={() => {
-                  console.log("test");
+                  let inputs = {};
+                  console.log(current, currentFn)
+                  const formKeys = formTemplate.map((x) => x.key);
+                  for (let key of formKeys) {
+                    if (!current) continue;
+                    let field = formTemplate.find((x) => x.key == key);
+                    let value;
+                    if (field.fn || currentFn[key])  {
+                      value = currentFn[key];
+                    } else {
+                      value = current[key];
+                    }
+
+                    inputs[key] = value;
+                    console.log("key", key, "value", value, currentFn[key], current[key]);
+                    if (field.alias) {
+                      for (let alias of field.alias) {
+                        inputs[alias] = value;
+                        if (!inputs[alias]) {
+                          inputs[alias] = "";
+                        }
+                      }
+                    }
+
+                    if (!inputs[key]) {
+                      inputs[key] = "";
+                    }
+                  }
+
+                  inputs = [inputs];
+                  console.log(inputs);
                   generate({ template, inputs }).then((pdf) => {
                     const blob = new Blob([pdf.buffer], {
                       type: "application/pdf",

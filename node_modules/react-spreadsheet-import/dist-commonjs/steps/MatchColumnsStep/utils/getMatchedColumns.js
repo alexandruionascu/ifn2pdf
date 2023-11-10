@@ -10,7 +10,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var lavenstein__default = /*#__PURE__*/_interopDefaultLegacy(lavenstein);
 
-const getMatchedColumns = (columns, fields, data, autoMapDistance) => columns.reduce((arr, column) => {
+const getMatchedColumns = (columns, fields, data, autoMapDistance, autoMapSelectValues) => columns.reduce((arr, column) => {
     const autoMatch = findMatch.findMatch(column.header, fields, autoMapDistance);
     if (autoMatch) {
         const field = fields.find((field) => field.key === autoMatch);
@@ -20,7 +20,7 @@ const getMatchedColumns = (columns, fields, data, autoMapDistance) => columns.re
             return lavenstein__default["default"](duplicate.value, duplicate.header) < lavenstein__default["default"](autoMatch, column.header)
                 ? [
                     ...arr.slice(0, duplicateIndex),
-                    setColumn.setColumn(arr[duplicateIndex], field, data),
+                    setColumn.setColumn(arr[duplicateIndex], field, data, autoMapSelectValues),
                     ...arr.slice(duplicateIndex + 1),
                     setColumn.setColumn(column),
                 ]
@@ -28,11 +28,11 @@ const getMatchedColumns = (columns, fields, data, autoMapDistance) => columns.re
                     ...arr.slice(0, duplicateIndex),
                     setColumn.setColumn(arr[duplicateIndex]),
                     ...arr.slice(duplicateIndex + 1),
-                    setColumn.setColumn(column, field, data),
+                    setColumn.setColumn(column, field, data, autoMapSelectValues),
                 ];
         }
         else {
-            return [...arr, setColumn.setColumn(column, field, data)];
+            return [...arr, setColumn.setColumn(column, field, data, autoMapSelectValues)];
         }
     }
     else {

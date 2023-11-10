@@ -2,7 +2,7 @@ import lavenstein from 'js-levenshtein';
 import { findMatch } from './findMatch.js';
 import { setColumn } from './setColumn.js';
 
-const getMatchedColumns = (columns, fields, data, autoMapDistance) => columns.reduce((arr, column) => {
+const getMatchedColumns = (columns, fields, data, autoMapDistance, autoMapSelectValues) => columns.reduce((arr, column) => {
     const autoMatch = findMatch(column.header, fields, autoMapDistance);
     if (autoMatch) {
         const field = fields.find((field) => field.key === autoMatch);
@@ -12,7 +12,7 @@ const getMatchedColumns = (columns, fields, data, autoMapDistance) => columns.re
             return lavenstein(duplicate.value, duplicate.header) < lavenstein(autoMatch, column.header)
                 ? [
                     ...arr.slice(0, duplicateIndex),
-                    setColumn(arr[duplicateIndex], field, data),
+                    setColumn(arr[duplicateIndex], field, data, autoMapSelectValues),
                     ...arr.slice(duplicateIndex + 1),
                     setColumn(column),
                 ]
@@ -20,11 +20,11 @@ const getMatchedColumns = (columns, fields, data, autoMapDistance) => columns.re
                     ...arr.slice(0, duplicateIndex),
                     setColumn(arr[duplicateIndex]),
                     ...arr.slice(duplicateIndex + 1),
-                    setColumn(column, field, data),
+                    setColumn(column, field, data, autoMapSelectValues),
                 ];
         }
         else {
-            return [...arr, setColumn(column, field, data)];
+            return [...arr, setColumn(column, field, data, autoMapSelectValues)];
         }
     }
     else {

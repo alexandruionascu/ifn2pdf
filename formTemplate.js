@@ -4,6 +4,7 @@ import { generateWords } from "./utils";
 export const formTemplate = [
   {
     key: "NR CONTRACT",
+    alias: ["NR CONTRACT1"],
     coords: [0, 0],
     fn: (row, formData) => {
       return row["NR CONTRACT / DATA"].split("-")[0].trim();
@@ -94,7 +95,6 @@ export const formTemplate = [
     alias: ["SERIE CI1"],
     coords: [845, 870],
     fn: (row, _) => {
-      return "";
       return row["ACT IDENTITATE"].split(".")[0].trim();
     },
   },
@@ -103,7 +103,6 @@ export const formTemplate = [
     alias: ["NR CI1"],
     coords: [1105, 870],
     fn: (row, _) => {
-      return "";
       return row["ACT IDENTITATE"].split(".")[1].trim();
     },
   },
@@ -118,7 +117,7 @@ export const formTemplate = [
     alias: ["VALOARE IMPRUMUT1", "VALOARE IMPRUMUT2", "VALOARE IMPRUMUT3"],
     coords: [1285, 945],
     placeholder: "Completeaza suma",
-    triggers: ["AM PLATIT SUMA DE", "AM PLATIT SUMA DE IN SCRIS"]
+    triggers: ["AM PLATIT SUMA DE", "VALOARE IMPRUMUT IN SCRIS"]
   },
   {
     key: "AM PLATIT SUMA DE",
@@ -129,7 +128,7 @@ export const formTemplate = [
     },
   },
   {
-    key: "AM PLATIT SUMA DE IN SCRIS",
+    key: "VALOARE IMPRUMUT IN SCRIS",
     coords: [0, 0],
     fn: (row, formData) => {
       return generateWords(
@@ -150,7 +149,7 @@ export const formTemplate = [
     placeholder: "Completeaza numarul",
     coords: [710, 1225],
     fn: (row, formData) => {
-      return "";
+      return "30";
       //return (new Date(formData["DATA SCADENTA"] - new Date(formData["DIN"]).days;
     }
   },
