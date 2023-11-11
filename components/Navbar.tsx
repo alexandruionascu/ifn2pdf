@@ -1,5 +1,12 @@
-import { useState } from 'react';
-import { Center, Tooltip, UnstyledButton, Stack, rem } from '@mantine/core';
+import { useEffect, useState } from "react";
+import {
+  Center,
+  Tooltip,
+  UnstyledButton,
+  Stack,
+  Text,
+  rem,
+} from "@mantine/core";
 import {
   IconHome2,
   IconGauge,
@@ -10,8 +17,8 @@ import {
   IconSettings,
   IconLogout,
   IconSwitchHorizontal,
-} from '@tabler/icons-react';
-import classes from './Navbar.module.css';
+} from "@tabler/icons-react";
+import classes from "./Navbar.module.css";
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -23,26 +30,37 @@ interface NavbarLinkProps {
 function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <UnstyledButton onClick={onClick} className={classes.link} data-active={active || undefined}>
-        <Icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+      <UnstyledButton
+        onClick={onClick}
+        className={classes.link}
+        data-active={active || undefined}
+      >
+        <Icon
+          style={{ width: rem(20), height: rem(20) }}
+          stroke={1.5}
+          color={active ? "black" : "white"}
+        />
       </UnstyledButton>
     </Tooltip>
   );
 }
 
 const mockdata = [
-  { icon: IconHome2, label: 'Home' },
-  { icon: IconGauge, label: 'Dashboard' },
-  { icon: IconDeviceDesktopAnalytics, label: 'Analytics' },
-  { icon: IconCalendarStats, label: 'Releases' },
-  { icon: IconUser, label: 'Account' },
-  { icon: IconFingerprint, label: 'Security' },
-  { icon: IconSettings, label: 'Settings' },
+  { icon: IconHome2, label: "Generaza contract" },
+  { icon: IconCalendarStats, label: "Prelungeste contract" },
+  { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
+  { icon: IconGauge, label: "Releases" },
+  { icon: IconUser, label: "Account" },
+  { icon: IconFingerprint, label: "Security" },
+  { icon: IconSettings, label: "Settings" },
 ];
 
-export function Navbar() {
-  const [active, setActive] = useState(2);
+export function Navbar(props: { onChange: (idx: number) => void }) {
+  const [active, setActive] = useState(0);
 
+  useEffect(() => {
+    props.onChange(active);
+  }, [active]);
   const links = mockdata.map((link, index) => (
     <NavbarLink
       {...link}
@@ -55,7 +73,7 @@ export function Navbar() {
   return (
     <nav className={classes.navbar}>
       <Center>
-        Logo
+        <Text style={{ color: "white", fontWeight: 700 }}>IFN</Text>
       </Center>
 
       <div className={classes.navbarMain}>
@@ -68,5 +86,6 @@ export function Navbar() {
         <NavbarLink icon={IconSwitchHorizontal} label="Change account" />
         <NavbarLink icon={IconLogout} label="Logout" />
       </Stack>
-    </nav>);
+    </nav>
+  );
 }

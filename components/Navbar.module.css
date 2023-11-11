@@ -4,7 +4,7 @@
     padding: var(--mantine-spacing-md);
     display: flex;
     flex-direction: column;
-    background-color: var(--mantine-color-blue-filled);
+    background-color: #5D55FA;
   }
   
   .navbarMain {

@@ -135,9 +135,13 @@ export const formTemplate = [
     key: "VALOARE IMPRUMUT IN SCRIS",
     coords: [0, 0],
     fn: (row, formData) => {
+      let value = parseFloat(formData["VALOARE IMPRUMUT"]);
+      if (isNaN(value)) {
+        value = 0;
+      }
       return (
         generateWords(
-          parseFloat(formData["VALOARE IMPRUMUT"])
+          value
         ).toLocaleUpperCase() + " LEI"
       );
     },
@@ -152,7 +156,6 @@ export const formTemplate = [
     key: "NR ZILE",
     // data din  data scadenta - contract = nr zile
     // validare daca e duminica
-    placeholder: "Completeaza numarul",
     coords: [710, 1225],
     fn: (row, formData) => {
       return "30";
@@ -167,10 +170,13 @@ export const formTemplate = [
   },
   {
     key: "SUMA DE RESTITUIT",
-    placeholder: "Completeaza suma",
     coords: [1945, 1225],
     fn: (row, formData) => {
-      return (parseFloat(formData["COMISION"]) + parseFloat(formData["VALOARE IMPRUMUT"])).toString();
+      let comision = parseFloat(formData["COMISION"]);
+      let imprumut = parseFloat(formData["VALOARE IMPRUMUT"]);
+      if (isNaN(comision)) comision = 0;
+      if (isNaN(imprumut)) imprumut = 0;
+      return (comision + imprumut).toString();
     },
   },
   {
