@@ -142,7 +142,7 @@ export const formTemplate = [
       return (
         generateWords(
           value
-        ).toLocaleUpperCase() + " LEI"
+        ).replace(/ /g, "").toLocaleUpperCase() + "LEI"
       );
     },
   },

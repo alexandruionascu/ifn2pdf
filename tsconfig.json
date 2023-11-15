@@ -1,11 +1,15 @@
 {
-    "compilerOptions": {
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "jsx": "react",
-      "target": "es5",
-      "lib": ["dom", "es5", "es6", "es2017"],
-      "downlevelIteration": true,
-      "resolveJsonModule": true
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "target": "es5",
+    "lib": ["dom", "es5", "es6", "es2017"],
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "react": ["./node_modules/@types/react"]
     }
   }
+}
