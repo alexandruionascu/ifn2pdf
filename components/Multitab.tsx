@@ -16,7 +16,7 @@ export const MultiTab = (
     setPrevIdx(props.tabIdx);
   }, [props.tabIdx]);
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait"> 
       <motion.div
         transition={{
           duration: 0.2,
@@ -25,6 +25,7 @@ export const MultiTab = (
         initial={{ y: direction * 300, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: direction * -300, opacity: 0 }}
+      
       >
         {props.children && props.children[props.tabIdx]}
       </motion.div>

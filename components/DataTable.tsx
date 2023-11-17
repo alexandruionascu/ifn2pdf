@@ -1,10 +1,21 @@
-import * as React from 'react';
-import { Table } from "@mantine/core";
+import * as React from "react";
+import { Checkbox, Table } from "@mantine/core";
 
-
-export const DataTable = (props: { data: any[]; fields: any[] }) => {
+export const DataTable = (props: {
+  data: any[];
+  fields: any[];
+  selectedIdx: number;
+  onSelectChange: (newIdx: number) => void;
+}) => {
   const rows = props.data.map((element, i) => (
     <Table.Tr key={i}>
+      <Table.Td>
+        <Checkbox
+          onClick={() => props.onSelectChange(i)}
+          checked={i == props.selectedIdx}
+        />
+      </Table.Td>
+
       {props.fields.map((field, i) => (
         <Table.Td key={i}>{element[field.key]}</Table.Td>
       ))}

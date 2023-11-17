@@ -7,13 +7,14 @@ import {
   serialize,
 } from "class-transformer";
 import { databox } from "../models/DataBox";
-import { Contract } from "../models/Contract";
 
 interface IPropertySchema {
   component?: React.FC<any>;
   key: string;
   importKey?: string;
+  exportKey?: string;
   propertyIndex: number;
+  args?: string[];
 }
 
 interface IClassSchema {
@@ -91,6 +92,44 @@ export function ImportKey(data: string) {
   };
 }
 
+export function ExportKey(data: string) {
+  return function (target: any, key: string) {
+    const className = target.constructor.name;
+    if (!schema[className]) {
+      schema[className] = {};
+    }
+    if (!schema[className][key]) {
+      schema[className][key] = {
+        exportKey: data,
+        key: `__${className}_${key}__`,
+        propertyIndex: Object.keys(schema[className]).length,
+      };
+    } else {
+      schema[className][key].exportKey = data;
+    }
+  };
+}
+
+export function ImportExportKey(data: string) {
+  return function (target: any, key: string) {
+    const className = target.constructor.name;
+    if (!schema[className]) {
+      schema[className] = {};
+    }
+    if (!schema[className][key]) {
+      schema[className][key] = {
+        importKey: data,
+        exportKey: data,
+        key: `__${className}_${key}__`,
+        propertyIndex: Object.keys(schema[className]).length,
+      };
+    } else {
+      schema[className][key].importKey = data;
+      schema[className][key].exportKey = data;
+    }
+  };
+}
+
 interface ISpreadsheetField {
   label: string;
   key: string;
@@ -105,7 +144,13 @@ class BoxModel {
 
   constructor() {
     this.__className__ = this.constructor.name;
+
     this.__schema__ = schema[this.__className__];
+  }
+
+  public static getKeys(): string[] {
+    const propKeys = Object.values(schema[this.name]).map(x => x.key);
+    return propKeys;
   }
 
   public static get spreadsheetFields(): ISpreadsheetField[] {
@@ -229,3 +274,27 @@ class DataBoxCollection<T> implements Iterable<T> {
 }
 
 export { DataBoxCollection, DataBox };
+
+const ArgKey = (key: string) => {
+  return (target: any, propertyKey: string, parameterIndex: number) => {
+    const className = target.constructor.name;
+    if (!schema[className]) {
+      schema[className] = {};
+    }
+    if (!schema[className][propertyKey]) {
+      schema[className][propertyKey] = {
+        key: `__${className}_${propertyKey}__`,
+        propertyIndex: Object.keys(schema[className]).length,
+      };
+    }
+
+    let args = schema[className][propertyKey.toString()].args;
+    if (!args) {
+      args = [];
+    }
+    args.push(key);
+    schema[className][propertyKey.toString()].args = args;
+  };
+};
+
+export { ArgKey };
