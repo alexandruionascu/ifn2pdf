@@ -8,6 +8,9 @@ import { NewContractPage } from "./pages/NewContractPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ExtendContractPage } from "./pages/ExtendContractPage";
 import { HomePage } from "./pages/HomePage";
+import { DeleteDataPage } from "./pages/DeleteDataPage";
+import { ImportDataPage } from "./pages/ImportDataPage";
+import { ExportDataPage } from "./pages/ExportDataPage";
 
 // This is initial data.
 
@@ -187,17 +190,17 @@ export const App = () => {
           <HomePage />
           <NewContractPage />
           <ExtendContractPage />
+          <div>Iesire contract</div>
           <div>
             <h2>Raport de gesiune</h2>
           </div>
           <div>
             <h2>Nota de contabilitate</h2>
           </div>
+          <ImportDataPage />
+          <ExportDataPage />
           <div>
-            <h2>Salveaza datele</h2>
-          </div>
-          <div>
-            <h2>Sterge datele</h2>
+            <DeleteDataPage />
           </div>
           <div>
             <SettingsPage />

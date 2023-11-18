@@ -10,6 +10,7 @@ import { FillFormStep } from "../steps/FillFormStep";
 import { formTemplate } from "../formTemplates/NewContractFormTemplate";
 import { PDFFillStep } from "../steps/PDFFillStep";
 import contractTemplate from "../pdfTemplates/contractTemplate.json";
+import { NoDataStep } from "../steps/NoDataStep";
 
 const storage = new IDBStorage();
 
@@ -32,7 +33,7 @@ export const ExtendContractPage = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   if (data.length == 0) {
-    return <h2>Nu ai date incarcate</h2>;
+    return <NoDataStep />;
   }
   return (
     <div>

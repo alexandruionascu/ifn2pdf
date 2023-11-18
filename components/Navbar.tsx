@@ -10,11 +10,7 @@ import {
 } from "@mantine/core";
 import {
   IconHome2,
-  IconGauge,
-  IconDeviceDesktopAnalytics,
-  IconFingerprint,
   IconCalendarStats,
-  IconUser,
   IconSettings,
   IconLogout,
   IconSwitchHorizontal,
@@ -23,6 +19,8 @@ import {
   IconClipboardList,
   IconFileDollar,
   IconFilePlus,
+  IconTableImport,
+  IconRun,
 } from "@tabler/icons-react";
 import classes from "./Navbar.module.css";
 
@@ -53,10 +51,12 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 
 const mockdata = [
   { icon: IconHome2, label: "Acasa" },
-  { icon: IconFilePlus, label: "Genereaza contract"},
+  { icon: IconFilePlus, label: "Genereaza contract" },
   { icon: IconCalendarStats, label: "Prelungeste contract" },
+  { icon: IconRun, label: "Iesire contract" },
   { icon: IconClipboardList, label: "Raport de gestiune" },
   { icon: IconFileDollar, label: "Nota de contabilitate" },
+  { icon: IconTableImport, label: "Importa datele" },
   { icon: IconDeviceFloppy, label: "Salveaza datele" },
   { icon: IconAlertTriangle, label: "Sterge datele" },
   { icon: IconSettings, label: "Settings" },

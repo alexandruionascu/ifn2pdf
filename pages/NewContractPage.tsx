@@ -133,6 +133,8 @@ export const NewContractPage = () => {
             <DataTable
               fields={Contract.spreadsheetFields}
               data={filteredData}
+              selectedIdx={0}
+              onSelectChange={function (newIdx: number): void {}}
             />
           </div>
         </div>

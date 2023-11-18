@@ -8,7 +8,7 @@ export const DataTable = (props: {
   onSelectChange: (newIdx: number) => void;
 }) => {
   const rows = props.data.map((element, i) => (
-    <Table.Tr key={i}>
+    <Table.Tr key={i} onClick={() => props.onSelectChange(i)}>
       <Table.Td>
         <Checkbox
           onClick={() => props.onSelectChange(i)}

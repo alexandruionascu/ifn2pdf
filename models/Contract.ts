@@ -18,7 +18,7 @@ type MyObjectType = {
 };
 
 
-class Contract extends BoxModel {
+abstract class Contract extends BoxModel {
   @Key("NR CONTRACT")
   @Component(TextInput)
   contractNo: number;
