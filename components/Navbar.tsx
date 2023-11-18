@@ -18,6 +18,11 @@ import {
   IconSettings,
   IconLogout,
   IconSwitchHorizontal,
+  IconAlertTriangle,
+  IconDeviceFloppy,
+  IconClipboardList,
+  IconFileDollar,
+  IconFilePlus,
 } from "@tabler/icons-react";
 import classes from "./Navbar.module.css";
 
@@ -47,12 +52,13 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 }
 
 const mockdata = [
-  { icon: IconHome2, label: "Generaza contract" },
+  { icon: IconHome2, label: "Acasa" },
+  { icon: IconFilePlus, label: "Genereaza contract"},
   { icon: IconCalendarStats, label: "Prelungeste contract" },
-  { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
-  { icon: IconGauge, label: "Releases" },
-  { icon: IconUser, label: "Account" },
-  { icon: IconFingerprint, label: "Security" },
+  { icon: IconClipboardList, label: "Raport de gestiune" },
+  { icon: IconFileDollar, label: "Nota de contabilitate" },
+  { icon: IconDeviceFloppy, label: "Salveaza datele" },
+  { icon: IconAlertTriangle, label: "Sterge datele" },
   { icon: IconSettings, label: "Settings" },
 ];
 

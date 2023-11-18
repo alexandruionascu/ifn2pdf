@@ -8,6 +8,8 @@ import IDBStorage from "idbstorage";
 import { SelectContractStep } from "../steps/SelectContractStep";
 import { FillFormStep } from "../steps/FillFormStep";
 import { formTemplate } from "../formTemplates/NewContractFormTemplate";
+import { PDFFillStep } from "../steps/PDFFillStep";
+import contractTemplate from "../pdfTemplates/contractTemplate.json";
 
 const storage = new IDBStorage();
 
@@ -36,7 +38,7 @@ export const ExtendContractPage = () => {
     <div>
       <Stepper
         active={active}
-        classNames={{steps: classes.steps}}
+        classNames={{ steps: classes.steps }}
         onStepClick={setActive}
         style={{ width: "100%" }}
       >
@@ -57,12 +59,20 @@ export const ExtendContractPage = () => {
         >
           <FillFormStep
             formTemplate={formTemplate}
-            onOutputJson={() => {}}
+            onOutputJson={(formData) => {
+              setCurrentOut(formData);
+            }}
             inputJson={currentOut}
           />
         </Stepper.Step>
         <Stepper.Step label="Al treilea pas" description="Descarca PDF">
-          Step 3 content: Get full access
+          <PDFFillStep
+            inputJson={currentOut}
+            pdfTemplate={contractTemplate}
+            onOutputJson={function (output: Object): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
         </Stepper.Step>
         <Stepper.Completed>
           Completed, click back button to get to previous step

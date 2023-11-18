@@ -58,10 +58,11 @@ export const SelectContractStep: React.FC<Props> = ({
   React.useEffect(() => {
     if (filteredData.length > 0) {
       onOutputJson(filteredData[selectedIdx]);
+      console.log(filteredData[selectedIdx])
     } else {
       onOutputJson(null);
     }
-  }, [selectedIdx]);
+  }, [selectedIdx, filteredData]);
 
   return (
     <div style={{ padding: "1rem" }}>

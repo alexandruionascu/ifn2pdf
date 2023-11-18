@@ -7,6 +7,7 @@ import { MultiTab } from "./components/Multitab";
 import { NewContractPage } from "./pages/NewContractPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ExtendContractPage } from "./pages/ExtendContractPage";
+import { HomePage } from "./pages/HomePage";
 
 // This is initial data.
 
@@ -183,19 +184,20 @@ export const App = () => {
       />
       <div style={{ height: "100%", width: "100%", overflow: 'scroll', maxWidth: '100%' }}>
         <MultiTab tabIdx={pageIdx}>
+          <HomePage />
           <NewContractPage />
           <ExtendContractPage />
           <div>
-            <h2>Heeeey</h2>
+            <h2>Raport de gesiune</h2>
           </div>
           <div>
-            <h2>Test</h2>
+            <h2>Nota de contabilitate</h2>
           </div>
           <div>
-            <h2></h2>
+            <h2>Salveaza datele</h2>
           </div>
           <div>
-            <h2></h2>
+            <h2>Sterge datele</h2>
           </div>
           <div>
             <SettingsPage />

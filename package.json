@@ -19,6 +19,7 @@
     "@tabler/icons-react": "^2.40.0",
     "@uiw/react-split": "^5.9.1",
     "class-transformer": "^0.5.1",
+    "dayjs": "^1.11.10",
     "exceljs": "^4.4.0",
     "framer-motion": "^10.16.4",
     "idbstorage": "^0.1.1",

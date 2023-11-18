@@ -20,8 +20,8 @@ export const FillFormStep: React.FC<Props> = ({
     if (!firstComputed) {
       let newFormData = { ...formData };
       for (let field of formTemplate) {
+        let result = newFormData[field.key];
         if (field.fn) {
-          let result;
           try {
             result = field.fn(formData, {});
           } catch (err) {
@@ -29,18 +29,30 @@ export const FillFormStep: React.FC<Props> = ({
             newFormData[field.key] = result;
           }
         }
-        setFormData(newFormData);
-        setFirstComputed(true);
+        if (field.pdfKeys) {
+          for (let pdfKey of field.pdfKeys) {
+            newFormData[pdfKey] = result;
+          }
+        }
       }
+      setFormData(newFormData);
+      setFirstComputed(true);
     }
+
   }, [formData]);
 
   const updateData = (key: string, newValue: string, vformData) => {
-    console.log('update field', key, newValue)
-    let field = formTemplate.find(x => x.key == key);
+    console.log("update field", key, newValue);
+    let field = formTemplate.find((x) => x.key == key);
     let newFormData = { ...vformData };
-    if (newValue) {
-        newFormData[key] = newValue;
+    if (newValue != null) {
+      newFormData[key] = newValue;
+      if (field.pdfKeys) {
+        console.log("update keys", field.pdfKeys);
+        for (let pdfKey of field.pdfKeys) {
+          newFormData[pdfKey] = newValue;
+        }
+      }
     }
     if (field.triggers) {
       for (let triggerKey of field.triggers) {
@@ -51,16 +63,24 @@ export const FillFormStep: React.FC<Props> = ({
             result = triggerField.fn(newFormData, {});
           } catch (err) {
           } finally {
-            newFormData = {...newFormData, [triggerKey]: result};
-            console.log('fn trigger', triggerKey, result, newFormData)
+            newFormData[triggerKey] = result;
+            if (triggerField.pdfKeys) {
+              for (let pdfKey of triggerField.pdfKeys) {
+                newFormData[pdfKey] = result;
+              }
+            }
             newFormData = updateData(triggerKey, null, newFormData);
           }
         }
       }
     }
-
+    console.log("formdata", newFormData);
     return newFormData;
   };
+
+  React.useEffect(() => {
+    onOutputJson(formData);
+  }, [formData]);
   return (
     <div>
       <Paper
@@ -97,7 +117,7 @@ export const FillFormStep: React.FC<Props> = ({
                       value={formData[field.key]}
                       onChange={(e) => {
                         setFormData(
-                          updateData(field.key, e.target.value, formData )
+                          updateData(field.key, e.target.value, formData)
                         );
                       }}
                     />
