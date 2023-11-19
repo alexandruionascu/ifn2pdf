@@ -18,7 +18,7 @@
 
 ```npm run dev```
 
-<p>Proiectul va fi disponibil la adresa <a href="http://localhost:5173" target="_blank">http://localhost:3000</a>. Deschide această adresă în browser pentru a vedea aplicația.</p>
+<p>Proiectul va fi disponibil la adresa <a href="http://localhost:5173" target="_blank">http://localhost:5173</a>. Deschide această adresă în browser pentru a vedea aplicația.</p>
 <h2>Construirea pentru producție</h2>
 <ol start="4">
   <li>Pentru a construi proiectul pentru producție, rulează:</li>
