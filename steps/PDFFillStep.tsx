@@ -20,8 +20,6 @@ export const PDFFillStep: React.FC<Props> = ({
     inputs[pdfKey] = inputJson[pdfKey] ?? "";
   }
   inputs = [inputs];
-
-  console.log(inputs);
   const [pdfData, setPdfData] = React.useState(null);
   React.useEffect(() => {
     if (pdfData) return;

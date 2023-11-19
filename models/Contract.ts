@@ -110,7 +110,7 @@ abstract class Contract extends BoxModel {
   issuedBy: string;
 
   @Key("VALOARE IMPRUMUT")
-  @ImportExportKey("VALOARE IMPRUMUT - RON")
+  @ImportExportKey("VALOARE IMPRUMUT")
   loanValue: string;
 
   @Key("VALOARE IMPRUMUT IN SCRIS")

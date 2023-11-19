@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Contract } from "../models/Contract";
 import { databox } from "../models/DataBox";
-import { Stepper, Button, Group, Title } from "@mantine/core";
+import { Stepper, Button, Group, Title, Center } from "@mantine/core";
 import classes from "./stepper.module.css";
 import { SelectDataStep } from "../steps/SelectDataStep";
 import IDBStorage from "idbstorage";
@@ -11,6 +11,7 @@ import { formTemplate } from "../formTemplates/NewContractFormTemplate";
 import { PDFFillStep } from "../steps/PDFFillStep";
 import contractTemplate from "../pdfTemplates/contractTemplate.json";
 import { NoDataStep } from "../steps/NoDataStep";
+import { ExportAndSaveStep } from "../steps/ExportAndSaveStep";
 
 const storage = new IDBStorage();
 
@@ -28,7 +29,7 @@ export const ExtendContractPage = () => {
 
   const [active, setActive] = React.useState(0);
   const nextStep = () =>
-    setActive((current) => (current < 3 ? current + 1 : current));
+    setActive((current) => (current < 4 ? current + 1 : current));
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
@@ -66,20 +67,29 @@ export const ExtendContractPage = () => {
             inputJson={currentOut}
           />
         </Stepper.Step>
+        <Stepper.Step
+          label="Al doilea pas"
+          description="Completeaza formularul"
+        >
+          <input placeholder="NR ZILE" />
+          <input placeholder="COMISION" />
+        </Stepper.Step>
         <Stepper.Step label="Al treilea pas" description="Descarca PDF">
           <PDFFillStep
             inputJson={currentOut}
             pdfTemplate={contractTemplate}
-            onOutputJson={function (output: Object): void {
-              throw new Error("Function not implemented.");
+            onOutputJson={(_) => {
+                // do nothing
             }}
           />
         </Stepper.Step>
+        <Stepper.Step label="Al patrulea pas" description="Confirma salvarea">
+          <ExportAndSaveStep formTemplate={formTemplate} inputJson={currentOut} onOutputJson={() => {}} />
+        </Stepper.Step>
         <Stepper.Completed>
-          Completed, click back button to get to previous step
+         <Center>Contractul a fost salvat cu succes.</Center>
         </Stepper.Completed>
       </Stepper>
-
       <Group justify="center" mt="xl" className={classes.bottomGroup}>
         <Button variant="default" onClick={prevStep}>
           Inapoi

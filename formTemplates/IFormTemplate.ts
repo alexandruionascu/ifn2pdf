@@ -6,6 +6,10 @@ export interface IFieldTemplate<T> {
     triggers?: string[],
     readonly?: boolean
     type?: string;
+    export?: {
+        key: string;
+        fn?: (formData: T) => any
+    }
 }
 
 export type IFormTemplate<T> = IFieldTemplate<T>[];

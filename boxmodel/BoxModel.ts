@@ -149,7 +149,7 @@ class BoxModel {
   }
 
   public static getKeys(): string[] {
-    const propKeys = Object.values(schema[this.name]).map(x => x.key);
+    const propKeys = Object.values(schema[this.name]).map((x) => x.key);
     return propKeys;
   }
 
@@ -198,6 +198,13 @@ class DataBox {
   }
 }
 
+const myConstObject = {
+  "TEST OF": 123,
+  "TEST": "123",
+ } as const;
+
+type MyConstObjectKeys = keyof typeof myConstObject[number];
+
 class DataBoxCollection<T> implements Iterable<T> {
   public data: T[] = [];
   private className: string;
@@ -235,13 +242,12 @@ class DataBoxCollection<T> implements Iterable<T> {
     return this.data.length;
   }
 
-  load(): Promise<T[]> {
-    const constr: any = databoxSchema[this.databoxClassName][this.className];
+  load(): Promise<any[]> {
+    //const constr: any = databoxSchema[this.databoxClassName][this.className];
     return this.storage.getItem(this.className).then((data) => {
       const jsonArr = JSON.parse(data);
-      const insts = jsonArr.map((x) => plainToInstance(constr, x));
-      this.data = insts;
-      return insts;
+      this.data = jsonArr;
+      return jsonArr;
     });
   }
 

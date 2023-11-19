@@ -2,12 +2,20 @@ import { parseAddress } from "../utils";
 import { generateWords } from "../utils";
 import { IFieldTemplate, IFormTemplate } from "./IFormTemplate";
 
+
+
 export const formTemplate: IFormTemplate<any> = [
   {
     key: "NR CONTRACT",
     pdfKeys: ["NR CONTRACT", "NR CONTRACT1"],
     fn: (row, formData) => {
       return row["NR CONTRACT / DATA"].split("-")[0].trim();
+    },
+    export: {
+      key: "NR CONTRACT / DATA",
+      fn: (row) => {
+        return `${row["NR CONTRACT"]}-${row["DIN"]}`;
+      },
     },
   },
   {
@@ -20,18 +28,62 @@ export const formTemplate: IFormTemplate<any> = [
   {
     key: "NUME",
     pdfKeys: ["NUME1"],
+    export: {
+      key: "NUME",
+    },
   },
   {
     key: "CNP",
+    export: {
+      key: "CNP",
+    },
   },
   {
     key: "JUDET",
+    export: {
+      key: "JUDET",
+    },
   },
   {
     key: "LOCALITATEA",
     fn: (row, _) => {
       let addr = parseAddress(row["ADRESA"]);
       return addr["city"];
+    },
+    export: {
+      key: "ADRESA",
+      fn: (row) => {
+        let street = row["STRADA"];
+        let bloc = row["BLOC"];
+        let scara = row["SCARA"];
+        let ap = row["APARTAMENT"];
+        let city = row["LOCALITATEA"];
+        let streetNo  = row["NUMARUL STRAZII"];
+ 
+        let fulladdr = "";
+        if (city) {
+          fulladdr += city + ", ";
+        }
+        if (street) {
+          fulladdr += street + " "
+        }
+        if (streetNo) {
+          fulladdr += "NR " + streetNo + " ";
+        }
+
+        if (bloc) {
+          fulladdr += "BL " + bloc + " "; 
+        }
+
+        if (scara) {
+          fulladdr += "SC " + scara + " ";
+        }
+        if (ap) {
+          fulladdr += "AP " + ap + " ";
+        }
+        
+        return fulladdr;
+      },
     },
   },
   {
@@ -80,6 +132,12 @@ export const formTemplate: IFormTemplate<any> = [
     fn: (row, _) => {
       return row["ACT IDENTITATE"].split(".")[0].trim();
     },
+    export: {
+      key: "ACT IDENTITATE",
+      fn: (row) => {
+        return `${row["SERIE CI"]}.${row["NR CI"]}`;
+      },
+    },
   },
   {
     key: "NR CI",
@@ -90,6 +148,9 @@ export const formTemplate: IFormTemplate<any> = [
   },
   {
     key: "ELIBERAT DE",
+    export: {
+      key: "ELIBERAT DE",
+    },
   },
   {
     key: "VALOARE IMPRUMUT",
@@ -100,6 +161,9 @@ export const formTemplate: IFormTemplate<any> = [
       "AM PLATIT SUMA DE",
       "VALOARE IMPRUMUT IN SCRIS",
     ],
+    export: {
+      key: "VALOARE IMPRUMUT"
+    }
   },
   {
     key: "AM PLATIT SUMA DE",
@@ -121,6 +185,9 @@ export const formTemplate: IFormTemplate<any> = [
   {
     key: "DATA SCADENTA",
     placeholder: "Completeaza data",
+    export: {
+      key: "DATA SCADENTA"
+    }
   },
   {
     key: "NR ZILE",
@@ -130,11 +197,17 @@ export const formTemplate: IFormTemplate<any> = [
       return "30";
       //return (new Date(formData["DATA SCADENTA"] - new Date(formData["DIN"]).days;
     },
+    export: {
+      key: "NR ZILE"
+    }
   },
   {
     key: "COMISION",
     placeholder: "Completeaza comisionul",
     triggers: ["SUMA DE RESTITUIT"],
+    export: {
+      key: "COMISION - RON",
+    },
   },
   {
     key: "SUMA DE RESTITUIT",
@@ -145,6 +218,9 @@ export const formTemplate: IFormTemplate<any> = [
       if (isNaN(imprumut)) imprumut = 0;
       return (comision + imprumut).toString();
     },
+    export: {
+      key: "SUMA DE RESTITUIT"
+    }
   },
   {
     key: "GARANTII",
@@ -170,3 +246,5 @@ export const formTemplate: IFormTemplate<any> = [
     placeholder: "Completeaza",
   },
 ] as const;
+
+type MyConstObjectKeys = keyof typeof formTemplate;

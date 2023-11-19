@@ -68,7 +68,7 @@ export const SelectContractStep: React.FC<Props> = ({
     <div style={{ padding: "1rem" }}>
       <TextInput
         type="text"
-        onChange={(e) => setSearchInput(e.target.value)}
+        onChange={(e) => setSearchInput(e.target.value.toLocaleLowerCase())}
         placeholder="Search"
         style={{
           width: "100%",

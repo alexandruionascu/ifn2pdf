@@ -11,6 +11,7 @@ export const ImportDataPage: React.FC<any> = ({}) => {
   const columns = Contract.spreadsheetFields.map((x) => ({
     ...keyColumn(x.key, textColumn),
     title: x.key,
+    minWidth: 300
   }));
 
   const [flowOpen, setFlowOpen] = React.useState(false);
