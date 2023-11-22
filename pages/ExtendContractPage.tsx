@@ -50,7 +50,7 @@ export const ExtendContractPage = () => {
         >
           <SelectContractStep
             inputJson={data}
-            onOutputJson={(stepData) => {
+            onContractSelect={(stepData) => {
               setCurrentOut(stepData);
             }}
           />

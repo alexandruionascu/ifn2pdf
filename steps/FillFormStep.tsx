@@ -1,9 +1,10 @@
 import * as React from "react";
 import { IFormTemplate } from "../formTemplates/IFormTemplate";
 import { Input, Paper, TextInput, Textarea } from "@mantine/core";
+import { DataSheetGrid, keyColumn, textColumn } from "react-datasheet-grid";
 
 interface Props {
-  inputJson: Object[];
+  inputJson: Object;
   onOutputJson: (output: Object) => void;
   formTemplate: IFormTemplate<any>;
 }
@@ -21,7 +22,7 @@ export const FillFormStep: React.FC<Props> = ({
       let newFormData = { ...formData };
       for (let field of formTemplate) {
         let result = newFormData[field.key];
-        if (field.fn) {
+        if (field.fn && !result) {
           try {
             result = field.fn(formData, {});
           } catch (err) {
@@ -38,7 +39,6 @@ export const FillFormStep: React.FC<Props> = ({
       setFormData(newFormData);
       setFirstComputed(true);
     }
-
   }, [formData]);
 
   const updateData = (key: string, newValue: string, vformData) => {
@@ -74,13 +74,14 @@ export const FillFormStep: React.FC<Props> = ({
         }
       }
     }
-    console.log("formdata", newFormData);
     return newFormData;
   };
 
   React.useEffect(() => {
     onOutputJson(formData);
   }, [formData]);
+
+  const [sheetData, setSheetData] = React.useState([]);
   return (
     <div>
       <Paper
@@ -91,6 +92,10 @@ export const FillFormStep: React.FC<Props> = ({
       >
         {formTemplate.map((field) => {
           let type = field.type ?? "text";
+
+          if (field.type == "hidden") {
+            return null;
+          }
 
           return (
             <Input.Wrapper
@@ -120,6 +125,37 @@ export const FillFormStep: React.FC<Props> = ({
                           updateData(field.key, e.target.value, formData)
                         );
                       }}
+                    />
+                  ),
+                  sheet: (
+                    <DataSheetGrid
+                      value={sheetData}
+                      onChange={(value) => {
+                        let newData = updateData(
+                          "_OBIECTE",
+                          value.map((x) => x["OBIECTE"]) as any,
+                          formData
+                        );
+                        newData = updateData(
+                          "_TITLU",
+                          value.map((x) => x["TITLU"]) as any,
+                          newData
+                        );
+                        newData = updateData(
+                          "_GREUTATE / GR",
+                          value.map((x) => x["GREUTATE / GR"]) as any,
+                          newData
+                        );
+                        setFormData(updateData("GARANTII", null, newData));
+                        setSheetData(value);
+                      }}
+                      columns={["OBIECTE", "GREUTATE / GR", "TITLU"].map(
+                        (x) => ({
+                          ...keyColumn(x, textColumn),
+                          title: x,
+                          minWidth: 100,
+                        })
+                      )}
                     />
                   ),
                 }[type]

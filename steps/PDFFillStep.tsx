@@ -1,6 +1,6 @@
 import { Button, Paper } from "@mantine/core";
 import { generate } from "@pdfme/generator";
-import { IconDownload } from "@tabler/icons-react";
+import { IconBrowser, IconDownload } from "@tabler/icons-react";
 import * as React from "react";
 
 interface Props {
@@ -45,6 +45,20 @@ export const PDFFillStep: React.FC<Props> = ({
           onClick={() => {
             let tempLink = document.createElement("a");
             tempLink.href = pdfData;
+            tempLink.setAttribute("target", "_blank");
+            tempLink.click();
+          }}
+          rightSection={<IconBrowser size={14} />}
+          style={{ display: "block", margin: "0 auto", marginBottom: "1rem" }}
+        >
+          Deschide in nou tab
+        </Button>
+        {<iframe src={pdfData} width={"100%"} height={"1000px"} />}
+        <Button
+          size="l"
+          onClick={() => {
+            let tempLink = document.createElement("a");
+            tempLink.href = pdfData;
             let filename = `${inputJson["NR CONTRACT"]}_${inputJson["DIN"]}.pdf`;
             tempLink.setAttribute("download", filename);
             tempLink.click();
@@ -54,7 +68,6 @@ export const PDFFillStep: React.FC<Props> = ({
         >
           Descarca PDF
         </Button>
-        {<iframe src={pdfData} width={"100%"} height={"1000px"} />}
       </Paper>
     </div>
   );

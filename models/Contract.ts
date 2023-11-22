@@ -48,23 +48,23 @@ abstract class Contract extends BoxModel {
   fullAddress: string;
 
   @Key("NR CONTRACT / DATA")
-  @ImportExportKey("NR CONTRACT / DATA")
+  @ImportExportKey("NR. CONTRACT / DATA")
   contractNoAndDate: string;
 
   @Key("DATA")
   @ImportExportKey("DATA")
   date: Date;
 
-  @Key("OBIECTE")
+  @Key("_OBIECTE")
   @ImportExportKey("OBIECTE")
   objects: string[];
 
-  @Key("TITLU")
+  @Key("_TITLU")
   @ImportKey("TITLU")
   title: string;
 
-  @Key("GREUTATE / GRAM")
-  @ImportKey("GREUTATE / GRAM")
+  @Key("_GREUTATE / GR")
+  @ImportKey("GREUTATE / GR")
   weightPerG: string;
 
   @Key("JUDET")
@@ -109,8 +109,8 @@ abstract class Contract extends BoxModel {
   @Component(TextInput)
   issuedBy: string;
 
-  @Key("VALOARE IMPRUMUT")
-  @ImportExportKey("VALOARE IMPRUMUT")
+  @Key("VALOARE IMPRUMUT - RON")
+  @ImportExportKey("VALOARE IMPRUMUT - RON")
   loanValue: string;
 
   @Key("VALOARE IMPRUMUT IN SCRIS")

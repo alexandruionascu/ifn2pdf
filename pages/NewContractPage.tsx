@@ -18,14 +18,35 @@ const storage = new IDBStorage();
 export const NewContractPage = () => {
   const [data, setData] = React.useState([]);
   const [currentOut, setCurrentOut] = React.useState(null);
+  const [formData, setFormData] = React.useState({});
+  const [baseContract, setBaseContract] = React.useState({});
+  const [contractNo, setContractNo] = React.useState<string>("");
+  const [firstComputed, setFirstComputed] = React.useState(false);
 
   React.useEffect(() => {
-    if (data.length == 0) {
+    if (!firstComputed) {
       storage.getItem("contracts").then((contracts) => {
         setData(JSON.parse(contracts));
       });
+      setFirstComputed(true)
+    } else {
+      let maxContract = 0;
+      for (let contract of data) {
+        for (let key of Object.keys(contract)) {
+          if (key.indexOf("CONTRACT") > -1) {
+            if (!contract[key]) continue;
+            let nr = contract[key].split("-");
+            maxContract = Math.max(maxContract, parseInt(nr));
+          }
+        }
+      }
+      setContractNo((maxContract + 1).toString());
     }
   }, [data]);
+
+  React.useEffect(() => {
+    setFormData({ ...formData, "NR CONTRACT": contractNo });
+  }, [contractNo]);
 
   const [active, setActive] = React.useState(0);
   const nextStep = () =>
@@ -50,8 +71,9 @@ export const NewContractPage = () => {
         >
           <SelectContractStep
             inputJson={data}
-            onOutputJson={(stepData) => {
-              setCurrentOut(stepData);
+            onContractSelect={(contract) => {
+              setBaseContract(contract);
+              setFormData({ ...contract, "NR CONTRACT": contractNo });
             }}
           />
         </Stepper.Step>
@@ -61,10 +83,11 @@ export const NewContractPage = () => {
         >
           <FillFormStep
             formTemplate={formTemplate}
-            onOutputJson={(formData) => {
-              setCurrentOut(formData);
+            onOutputJson={(_formData) => {
+              setFormData(_formData);
+              setCurrentOut(_formData);
             }}
-            inputJson={currentOut}
+            inputJson={formData}
           />
         </Stepper.Step>
         <Stepper.Step label="Al treilea pas" description="Descarca PDF">

@@ -96,8 +96,8 @@ const fields = [
     },
   },
   {
-    label: "GREUTATE / GRAM",
-    key: "GREUTATE / GRAM",
+    label: "GREUTATE / GR",
+    key: "GREUTATE / GR",
     fieldType: {
       type: "input",
     },

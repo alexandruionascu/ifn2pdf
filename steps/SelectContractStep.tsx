@@ -6,14 +6,13 @@ import { formTemplate } from "../formTemplate";
 
 interface Props {
   inputJson: Object[];
-  onOutputJson: (output: Object) => void;
+  onContractSelect: (output: Object) => void;
 }
 
 export const SelectContractStep: React.FC<Props> = ({
-  inputJson,
-  onOutputJson,
+    inputJson,
+    onContractSelect,
 }) => {
-  console.log(inputJson);
   const [selectedIdx, setSelectedIdx] = React.useState(0);
   const [data, setData] = React.useState(inputJson);
   const [searchInput, setSearchInput] = React.useState("");
@@ -22,6 +21,7 @@ export const SelectContractStep: React.FC<Props> = ({
   const current = filteredData.length > 0 ? filteredData[0] : null;
   // computed data
   const [currentFn, setCurrentFn] = React.useState({});
+
 
   const updateFnData = (key: string, newValue: string) => {
     if (key) {
@@ -57,10 +57,7 @@ export const SelectContractStep: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (filteredData.length > 0) {
-      onOutputJson(filteredData[selectedIdx]);
-      console.log(filteredData[selectedIdx])
-    } else {
-      onOutputJson(null);
+      onContractSelect(filteredData[selectedIdx]);
     }
   }, [selectedIdx, filteredData]);
 
@@ -88,9 +85,4 @@ export const SelectContractStep: React.FC<Props> = ({
       />
     </div>
   );
-};
-
-SelectContractStep.defaultProps = {
-  inputJson: [],
-  onOutputJson: () => {},
 };

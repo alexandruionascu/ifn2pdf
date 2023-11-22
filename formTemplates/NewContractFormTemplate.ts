@@ -2,17 +2,12 @@ import { parseAddress } from "../utils";
 import { generateWords } from "../utils";
 import { IFieldTemplate, IFormTemplate } from "./IFormTemplate";
 
-
-
 export const formTemplate: IFormTemplate<any> = [
   {
     key: "NR CONTRACT",
     pdfKeys: ["NR CONTRACT", "NR CONTRACT1"],
-    fn: (row, formData) => {
-      return row["NR CONTRACT / DATA"].split("-")[0].trim();
-    },
     export: {
-      key: "NR CONTRACT / DATA",
+      key: "NR. CONTRACT / DATA",
       fn: (row) => {
         return `${row["NR CONTRACT"]}-${row["DIN"]}`;
       },
@@ -22,7 +17,12 @@ export const formTemplate: IFormTemplate<any> = [
     key: "DIN",
     pdfKeys: ["DIN1", "DIN2"],
     fn: (row, formData) => {
-      return row["NR CONTRACT / DATA"].split("-")[1].trim();
+      let today = new Date();
+      let dd = String(today.getDate());
+      let mm = String(today.getMonth() + 1);
+      let yy = String(today.getFullYear());
+
+      return dd + "." + mm + "." + yy;
     },
   },
   {
@@ -58,21 +58,21 @@ export const formTemplate: IFormTemplate<any> = [
         let scara = row["SCARA"];
         let ap = row["APARTAMENT"];
         let city = row["LOCALITATEA"];
-        let streetNo  = row["NUMARUL STRAZII"];
- 
+        let streetNo = row["NUMARUL STRAZII"];
+
         let fulladdr = "";
         if (city) {
           fulladdr += city + ", ";
         }
         if (street) {
-          fulladdr += street + " "
+          fulladdr += street + " ";
         }
         if (streetNo) {
           fulladdr += "NR " + streetNo + " ";
         }
 
         if (bloc) {
-          fulladdr += "BL " + bloc + " "; 
+          fulladdr += "BL " + bloc + " ";
         }
 
         if (scara) {
@@ -81,7 +81,7 @@ export const formTemplate: IFormTemplate<any> = [
         if (ap) {
           fulladdr += "AP " + ap + " ";
         }
-        
+
         return fulladdr;
       },
     },
@@ -153,8 +153,38 @@ export const formTemplate: IFormTemplate<any> = [
     },
   },
   {
-    key: "VALOARE IMPRUMUT",
-    pdfKeys: ["VALOARE IMPRUMUT1", "VALOARE IMPRUMUT2", "VALOARE IMPRUMUT3"],
+    key: "DATA",
+    type: "hidden",
+    export: {
+      key: "DATA",
+      fn: (row) => {
+        let today = new Date();
+        let dd = String(today.getDate());
+        let mm = String(today.getMonth() + 1);
+        let yy = String(today.getFullYear());
+
+        return yy + "-" + mm + "/" + dd;
+      },
+    },
+  },
+  {
+    key: "VALOARE INITIALA",
+    type: "hidden",
+    export: {
+      key: "VALOARE INITIALA",
+      fn: (row) => {
+        return row["VALOARE IMPRUMUT - RON"];
+      },
+    },
+  },
+  {
+    key: "VALOARE IMPRUMUT - RON",
+    pdfKeys: [
+      "VALOARE IMPRUMUT",
+      "VALOARE IMPRUMUT1",
+      "VALOARE IMPRUMUT2",
+      "VALOARE IMPRUMUT3",
+    ],
     placeholder: "Completeaza suma",
     triggers: [
       "SUMA DE RESTITUIT",
@@ -162,20 +192,20 @@ export const formTemplate: IFormTemplate<any> = [
       "VALOARE IMPRUMUT IN SCRIS",
     ],
     export: {
-      key: "VALOARE IMPRUMUT"
-    }
+      key: "VALOARE IMPRUMUT - RON",
+    },
   },
   {
     key: "AM PLATIT SUMA DE",
     readonly: true,
     fn: (row, formData) => {
-      return row["VALOARE IMPRUMUT"];
+      return row["VALOARE IMPRUMUT - RON"];
     },
   },
   {
     key: "VALOARE IMPRUMUT IN SCRIS",
     fn: (row, formData) => {
-      let value = parseFloat(row["VALOARE IMPRUMUT"]);
+      let value = parseFloat(row["VALOARE IMPRUMUT - RON"]);
       if (isNaN(value)) {
         value = 0;
       }
@@ -186,8 +216,8 @@ export const formTemplate: IFormTemplate<any> = [
     key: "DATA SCADENTA",
     placeholder: "Completeaza data",
     export: {
-      key: "DATA SCADENTA"
-    }
+      key: "DATA SCADENTA",
+    },
   },
   {
     key: "NR ZILE",
@@ -198,8 +228,8 @@ export const formTemplate: IFormTemplate<any> = [
       //return (new Date(formData["DATA SCADENTA"] - new Date(formData["DIN"]).days;
     },
     export: {
-      key: "NR ZILE"
-    }
+      key: "NR ZILE",
+    },
   },
   {
     key: "COMISION",
@@ -213,33 +243,78 @@ export const formTemplate: IFormTemplate<any> = [
     key: "SUMA DE RESTITUIT",
     fn: (row, formData) => {
       let comision = parseFloat(row["COMISION"]);
-      let imprumut = parseFloat(row["VALOARE IMPRUMUT"]);
+      let imprumut = parseFloat(row["VALOARE IMPRUMUT - RON"]);
       if (isNaN(comision)) comision = 0;
       if (isNaN(imprumut)) imprumut = 0;
       return (comision + imprumut).toString();
     },
     export: {
-      key: "SUMA DE RESTITUIT"
-    }
+      key: "SUMA DE RESTITUIT",
+    },
   },
   {
     key: "GARANTII",
-    type: "textarea",
-    fn: (rows) => {
-      /*let garantii = [];
-      for (let i = 0; i < Math.min(rows.length, 5); i++) {
-        garantii.push(
-          `${rows[i][colToIdx("I")]} - ${rows[i][colToIdx("K")]} - ${
-            rows[i][colToIdx("J")]
-          }g`
+    type: "sheet",
+    pdfKeys: ["GARANTII"],
+    fn: (row) => {
+      let garantii = "";
+      console.log(row["_TITLU"],
+      row["_OBIECTE"],
+      row["_GREUTATE / GR"])
+      for (
+        let i = 0;
+        i <
+        Math.max(
+          row["_TITLU"].length,
+          row["_OBIECTE"].length,
+          row["_GREUTATE / GR"].length
         );
+        i++
+      ) {
+        garantii +=
+          (row["_OBIECTE"][i] ?? "") +
+          "-" +
+          (row["_GREUTATE / GR"][i] ?? "") +
+          "-" +
+          (row["_TITLU"][i] ?? "") +
+          "\n";
       }
-      let res = garantii.join("\n");
-      if (rows.length > 5) {
-        res += "\n" + ".............";
-      }
-      return res;*/
+      return garantii;
     },
+  },
+  {
+    key: "_OBIECTE",
+    type: "hidden",
+    triggers: ["GARANTII"],
+    export: {
+      key: "OBIECTE",
+      fn: (row) => {
+        return row["_OBIECTE"].join(',')
+      }
+    }
+  },
+  {
+    key: "_TITLU",
+    type: "hidden",
+    triggers: ["GARANTII"],
+    export: {
+      key: "TITLU",
+      fn: (row) => {
+        return row["_TITLU"].join('/')
+      }
+    }
+    
+  },
+  {
+    key: "_GREUTATE / GR",
+    type: "hidden",
+    triggers: ["GARANTII"],
+    export: {
+      key: "GREUTATE / GR",
+      fn: (row) => {
+        return row["_GREUTATE / GR"].join('/')
+      }
+    }
   },
   {
     key: "DISPOZITIE DE PLATA NUMARUL",
