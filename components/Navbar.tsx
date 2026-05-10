@@ -21,6 +21,8 @@ import {
   IconFilePlus,
   IconTableImport,
   IconRun,
+  IconNetwork,
+  IconSchema,
 } from "@tabler/icons-react";
 import classes from "./Navbar.module.css";
 
@@ -60,6 +62,7 @@ const mockdata = [
   { icon: IconDeviceFloppy, label: "Salveaza datele" },
   { icon: IconAlertTriangle, label: "Sterge datele" },
   { icon: IconSettings, label: "Settings" },
+  { icon: IconSchema, label: "Schema"}
 ];
 
 export function Navbar(props: { onChange: (idx: number) => void }) {

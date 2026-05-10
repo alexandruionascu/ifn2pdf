@@ -5,7 +5,7 @@ import { IFieldTemplate, IFormTemplate } from "./IFormTemplate";
 export const formTemplate: IFormTemplate<any> = [
   {
     key: "NR CONTRACT",
-    pdfKeys: ["NR CONTRACT", "NR CONTRACT1"],
+    pdfKeys: ["NR CONTRACT", "NR CONTRACT1", "INCASARE NR CONTRACT"],
     export: {
       key: "NR. CONTRACT / DATA",
       fn: (row) => {
@@ -15,7 +15,8 @@ export const formTemplate: IFormTemplate<any> = [
   },
   {
     key: "DIN",
-    pdfKeys: ["DIN1", "DIN2"],
+    triggers: ["DATA SCADENTA"],
+    pdfKeys: ["DIN1", "DIN2", "INCASARE DIN"],
     fn: (row, formData) => {
       let today = new Date();
       let dd = String(today.getDate());
@@ -163,7 +164,7 @@ export const formTemplate: IFormTemplate<any> = [
         let mm = String(today.getMonth() + 1);
         let yy = String(today.getFullYear());
 
-        return yy + "-" + mm + "/" + dd;
+        return dd + "." + mm + "." + yy;
       },
     },
   },
@@ -214,19 +215,32 @@ export const formTemplate: IFormTemplate<any> = [
   },
   {
     key: "DATA SCADENTA",
-    placeholder: "Completeaza data",
+    default: new Date(
+      new Date().setDate(
+        new Date().getDate() + 30 + (new Date().getDay() === 0 ? 1 : 0)
+      )
+    ).toLocaleDateString("ro-RO"),
+    fn: (row, formData) => {
+      var [zi, luna, an] = row["DIN"].split(".").map(Number);
+      let date = new Date(an, luna - 1, zi);
+      var newDate = new Date(date);
+      newDate.setDate(newDate.getDate() + parseInt(row["NR ZILE"]));
+      if (newDate.getDay() == 0) {
+        newDate.setDate(newDate.getDate() + 1);
+      }
+      return newDate.toLocaleDateString("ro-RO");
+    },
     export: {
       key: "DATA SCADENTA",
     },
   },
   {
     key: "NR ZILE",
+    placeholder: "Numarul de zile",
+    default: "30",
+    triggers: ["DATA SCADENTA"],
     // data din  data scadenta - contract = nr zile
     // validare daca e duminica
-    fn: (row, formData) => {
-      return "30";
-      //return (new Date(formData["DATA SCADENTA"] - new Date(formData["DIN"]).days;
-    },
     export: {
       key: "NR ZILE",
     },
@@ -237,6 +251,13 @@ export const formTemplate: IFormTemplate<any> = [
     triggers: ["SUMA DE RESTITUIT"],
     export: {
       key: "COMISION - RON",
+    },
+  },
+  {
+    key: "COMISION PROCENT ZI",
+    placeholder: "Completeaza procentual (%) comisionul",
+    export: {
+      key: "COMISION PROCENT ZI",
     },
   },
   {
@@ -258,9 +279,7 @@ export const formTemplate: IFormTemplate<any> = [
     pdfKeys: ["GARANTII"],
     fn: (row) => {
       let garantii = "";
-      console.log(row["_TITLU"],
-      row["_OBIECTE"],
-      row["_GREUTATE / GR"])
+      //console.log(row["_TITLU"], row["_OBIECTE"], row["_GREUTATE / GR"]);
       for (
         let i = 0;
         i <
@@ -289,9 +308,9 @@ export const formTemplate: IFormTemplate<any> = [
     export: {
       key: "OBIECTE",
       fn: (row) => {
-        return row["_OBIECTE"].join(',')
-      }
-    }
+        return row["_OBIECTE"].join(",");
+      },
+    },
   },
   {
     key: "_TITLU",
@@ -300,10 +319,9 @@ export const formTemplate: IFormTemplate<any> = [
     export: {
       key: "TITLU",
       fn: (row) => {
-        return row["_TITLU"].join('/')
-      }
-    }
-    
+        return row["_TITLU"].join("/");
+      },
+    },
   },
   {
     key: "_GREUTATE / GR",
@@ -312,9 +330,9 @@ export const formTemplate: IFormTemplate<any> = [
     export: {
       key: "GREUTATE / GR",
       fn: (row) => {
-        return row["_GREUTATE / GR"].join('/')
-      }
-    }
+        return row["_GREUTATE / GR"].join("/");
+      },
+    },
   },
   {
     key: "DISPOZITIE DE PLATA NUMARUL",

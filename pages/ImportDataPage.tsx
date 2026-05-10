@@ -31,7 +31,7 @@ export const ImportDataPage: React.FC<any> = ({}) => {
           setFlowOpen(false);
         }}
         onSubmit={(data, file) => {
-          console.log(data, file);
+          //console.log(data, file);
           databox.contracts.importFromJSONList(data.validData, (done) => {
             setData(data.validData as any);
             setFlowOpen(false);

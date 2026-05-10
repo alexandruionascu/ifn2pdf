@@ -19,7 +19,7 @@ export const SelectDataStep: React.FC<Props> = ({ inputJson, onOutputJson }) => 
 
   React.useEffect(() => {
     databox.contracts.load().then((dataa) => {
-      console.log("loaded", dataa);
+      //console.log("loaded", dataa);
       setData(dataa);
     });
   }, []);
@@ -31,7 +31,7 @@ export const SelectDataStep: React.FC<Props> = ({ inputJson, onOutputJson }) => 
           setFlowOpen(false);
         }}
         onSubmit={(data, file) => {
-          console.log(data, file);
+          //console.log(data, file);
           databox.contracts.importFromJSONList(data.validData, (done) => {
             setData(data.validData as any);
             setFlowOpen(false);

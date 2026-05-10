@@ -9,7 +9,7 @@ import { SelectContractStep } from "../steps/SelectContractStep";
 import { FillFormStep } from "../steps/FillFormStep";
 import { formTemplate } from "../formTemplates/NewContractFormTemplate";
 import { PDFFillStep } from "../steps/PDFFillStep";
-import contractTemplate from "../pdfTemplates/contractTemplate.json";
+import contractTemplate from "../pdfTemplates/contractTemplate2026.json";
 import { NoDataStep } from "../steps/NoDataStep";
 import { ExportAndSaveStep } from "../steps/ExportAndSaveStep";
 
@@ -36,7 +36,9 @@ export const NewContractPage = () => {
           if (key.indexOf("CONTRACT") > -1) {
             if (!contract[key]) continue;
             let nr = contract[key].split("-");
-            maxContract = Math.max(maxContract, parseInt(nr));
+            let nrInt = parseInt(nr);
+            if (isNaN(nrInt) || nrInt == 0) continue;
+              maxContract = nrInt;
           }
         }
       }

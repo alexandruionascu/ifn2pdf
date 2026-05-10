@@ -137,6 +137,10 @@ export const formTemplate = [
     placeholder: "Completeaza comisionul",
     triggers: ["SUMA DE RESTITUIT"],
   },
+    {
+    key: "COMISION PROCENT ZI",
+    placeholder: "Completeaza procentual (%) comisionul",
+  },
   {
     key: "SUMA DE RESTITUIT",
     fn: (row, formData) => {

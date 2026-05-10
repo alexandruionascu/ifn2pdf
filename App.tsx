@@ -11,6 +11,7 @@ import { HomePage } from "./pages/HomePage";
 import { DeleteDataPage } from "./pages/DeleteDataPage";
 import { ImportDataPage } from "./pages/ImportDataPage";
 import { ExportDataPage } from "./pages/ExportDataPage";
+import { SchemaPage } from "./pages/SchemaPage";
 
 // This is initial data.
 
@@ -158,7 +159,6 @@ const addContract = (newContract) => {
   if (!contracts) {
     contracts = [];
   } else {
-    console.log(contracts);
     contracts = JSON.parse(newContract);
   }
   contracts.push(newContract);
@@ -181,11 +181,17 @@ export const App = () => {
     <div style={{ display: "flex", height: "100%" }}>
       <Navbar
         onChange={function (idx: number): void {
-          console.log("new page idx", idx);
           setPageIdx(idx);
         }}
       />
-      <div style={{ height: "100%", width: "100%", overflow: 'scroll', maxWidth: '100%' }}>
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          overflow: "scroll",
+          maxWidth: "100%",
+        }}
+      >
         <MultiTab tabIdx={pageIdx}>
           <HomePage />
           <NewContractPage />
@@ -204,6 +210,9 @@ export const App = () => {
           </div>
           <div>
             <SettingsPage />
+          </div>
+          <div style={{ height: 1500 }}>
+            <SchemaPage />
           </div>
         </MultiTab>
       </div>

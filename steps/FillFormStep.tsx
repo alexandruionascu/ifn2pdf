@@ -22,14 +22,16 @@ export const FillFormStep: React.FC<Props> = ({
       let newFormData = { ...formData };
       for (let field of formTemplate) {
         let result = newFormData[field.key];
+        if (field.default) {
+          result = field.default;
+        }
         if (field.fn && !result) {
           try {
             result = field.fn(formData, {});
-          } catch (err) {
-          } finally {
-            newFormData[field.key] = result;
-          }
+          } catch (err) {}
         }
+        newFormData[field.key] = result;
+
         if (field.pdfKeys) {
           for (let pdfKey of field.pdfKeys) {
             newFormData[pdfKey] = result;
@@ -42,13 +44,13 @@ export const FillFormStep: React.FC<Props> = ({
   }, [formData]);
 
   const updateData = (key: string, newValue: string, vformData) => {
-    console.log("update field", key, newValue);
+    //console.log("update field", key, newValue);
     let field = formTemplate.find((x) => x.key == key);
     let newFormData = { ...vformData };
     if (newValue != null) {
       newFormData[key] = newValue;
       if (field.pdfKeys) {
-        console.log("update keys", field.pdfKeys);
+        //console.log("update keys", field.pdfKeys);
         for (let pdfKey of field.pdfKeys) {
           newFormData[pdfKey] = newValue;
         }

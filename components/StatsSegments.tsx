@@ -1,58 +1,164 @@
-import * as React from 'react';
-import { Progress, Box, Text, Group, Paper, SimpleGrid, rem } from '@mantine/core';
-import { IconArrowUpRight, IconDeviceAnalytics } from '@tabler/icons-react';
-import classes from './StatsSegments.module.css';
+import * as React from "react";
+import { Paper, Group, Text, ThemeIcon, SimpleGrid, rem } from "@mantine/core";
+import {
+  IconArrowUpRight,
+  IconArrowDownRight,
+  IconAlertCircle,
+  IconCalendarTime,
+  IconCheck,
+} from "@tabler/icons-react";
+import IDBStorage from "idbstorage";
 
-const data = [
-  { label: 'Intrate', count: '204,001', part: 59, color: '#47d6ab' },
-  { label: 'Iesite iesite', count: '121,017', part: 41, color: '#03141a' },
-];
+const storage = new IDBStorage();
+
+interface StatusData {
+  label: string;
+  count: number;
+  part: number;
+  color: string;
+  icon: any;
+}
+
+const getContractStatus = (contract: any): string => {
+  const dataScadenta = contract["DATA SCADENTA"];
+  if (!dataScadenta) return "Necunoscut";
+  
+  const scadenta = new Date(dataScadenta);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  scadenta.setHours(0, 0, 0, 0);
+  
+  const diffDays = Math.floor((scadenta.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  
+  if (diffDays < 0) return "Scadent";
+  if (diffDays <= 7) return "Scade curând";
+  return "Activ";
+};
 
 export function StatsSegments() {
-  const segments = data.map((segment) => (
-    <Progress.Section value={segment.part} color={segment.color} key={segment.color}>
-      {segment.part > 10 && <Progress.Label>{segment.part}%</Progress.Label>}
-    </Progress.Section>
-  ));
+  const [data, setData] = React.useState<StatusData[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const loadData = async () => {
+      try {
+        const contractsData = await storage.getItem("contracts");
+        if (contractsData) {
+          const contracts = JSON.parse(contractsData);
+          
+          // Count contracts by status
+          const statusCounts = {
+            "Activ": 0,
+            "Scade curând": 0,
+            "Scadent": 0,
+          };
+
+          contracts.forEach((contract: any) => {
+            const status = getContractStatus(contract);
+            if (statusCounts[status] !== undefined) {
+              statusCounts[status]++;
+            }
+          });
+
+          const total = contracts.length;
+
+          const statusData: StatusData[] = [
+            {
+              label: "Active",
+              count: statusCounts["Activ"],
+              part: (statusCounts["Activ"] / total) * 100,
+              color: "#47d6ab",
+              icon: IconCheck,
+            },
+            {
+              label: "Scad curând",
+              count: statusCounts["Scade curând"],
+              part: (statusCounts["Scade curând"] / total) * 100,
+              color: "#ffa94d",
+              icon: IconCalendarTime,
+            },
+            {
+              label: "Scadente",
+              count: statusCounts["Scadent"],
+              part: (statusCounts["Scadent"] / total) * 100,
+              color: "#ff6b6b",
+              icon: IconAlertCircle,
+            },
+          ];
+
+          setData(statusData);
+        }
+      } catch (error) {
+        console.error("Error loading stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const segments = data.map((segment) => ({
+    value: segment.part,
+    color: segment.color,
+    label: segment.part > 10 ? `${segment.part.toFixed(0)}%` : undefined,
+  }));
 
   const descriptions = data.map((stat) => (
-    <Box key={stat.label} style={{ borderBottomColor: stat.color }} className={classes.stat}>
-      <Text tt="uppercase" fz="xs" c="dimmed" fw={700}>
+    <div key={stat.label} style={{ borderBottomColor: stat.color }}>
+      <Text ta="center" fz="lg" fw={700}>
+        {stat.count}
+      </Text>
+      <Text ta="center" fz="sm" c="dimmed" lh={1}>
         {stat.label}
       </Text>
-
-      <Group justify="space-between" align="flex-end" gap={0}>
-        <Text fw={700}>{stat.count}</Text>
-        <Text c={stat.color} fw={700} size="sm" className={classes.statCount}>
-          {stat.part}%
-        </Text>
-      </Group>
-    </Box>
+    </div>
   ));
 
   return (
-    <Paper withBorder p="md" radius="md">
+    <Paper withBorder p="md" radius="md" style={{ height: "100%" }}>
       <Group justify="space-between">
         <Group align="flex-end" gap="xs">
           <Text fz="xl" fw={700}>
-            345,765
-          </Text>
-          <Text c="teal" className={classes.diff} fz="sm" fw={700}>
-            <span>18%</span>
-            <IconArrowUpRight size="1rem" style={{ marginBottom: rem(4) }} stroke={1.5} />
+            Distribuție contracte
           </Text>
         </Group>
-        <IconDeviceAnalytics size="1.4rem" className={classes.icon} stroke={1.5} />
       </Group>
 
-      <Text c="dimmed" fz="sm">
-        Page views compared to previous month
+      <Text c="dimmed" fz="sm" mt="md">
+        Status contracte după scadență
       </Text>
 
-      <Progress.Root size={34} classNames={{ label: classes.progressLabel }} mt={40}>
-        {segments}
-      </Progress.Root>
-      <SimpleGrid cols={{ base: 1, xs: 3 }} mt="xl">
+      <div
+        style={{
+          display: "flex",
+          marginTop: rem(16),
+          marginBottom: rem(16),
+          height: rem(30),
+          borderRadius: rem(4),
+          overflow: "hidden",
+        }}
+      >
+        {segments.map((segment, index) => (
+          <div
+            key={index}
+            style={{
+              width: `${segment.value}%`,
+              backgroundColor: segment.color,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontSize: "12px",
+              fontWeight: 700,
+            }}
+          >
+            {segment.label}
+          </div>
+        ))}
+      </div>
+
+      <SimpleGrid cols={3} mt="xl">
         {descriptions}
       </SimpleGrid>
     </Paper>

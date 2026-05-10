@@ -140,6 +140,11 @@ abstract class Contract extends BoxModel {
   @Component(TextInput)
   commission: number;
 
+  @Key("COMISION PROCENT ZI")
+  @ImportKey("COMISION PROCENT ZI")
+  @Component(TextInput)
+  dailyComission;
+
   @Key("SUMA DE RESTITUIT")
   @ImportKey("SUMA DE RESTITUIT")
   @Component(TextInput)

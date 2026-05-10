@@ -180,7 +180,6 @@ export function DataBoxTable(classRef: any) {
       databoxSchema[className] = {};
     }
     databoxSchema[className][key] = classRef;
-    console.log(databoxSchema);
   };
 }
 
@@ -203,7 +202,7 @@ const myConstObject = {
   "TEST": "123",
  } as const;
 
-type MyConstObjectKeys = keyof typeof myConstObject[number];
+
 
 class DataBoxCollection<T> implements Iterable<T> {
   public data: T[] = [];
