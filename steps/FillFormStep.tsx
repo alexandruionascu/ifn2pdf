@@ -7,12 +7,14 @@ interface Props {
   inputJson: Object;
   onOutputJson: (output: Object) => void;
   formTemplate: IFormTemplate<any>;
+  renderPreview?: (formData: any) => React.ReactNode;
 }
 
 export const FillFormStep: React.FC<Props> = ({
   inputJson,
   onOutputJson,
   formTemplate,
+  renderPreview,
 }) => {
   const [formData, setFormData] = React.useState(inputJson);
   const [firstComputed, setFirstComputed] = React.useState(false);
@@ -85,12 +87,21 @@ export const FillFormStep: React.FC<Props> = ({
 
   const [sheetData, setSheetData] = React.useState([]);
   return (
-    <div>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: renderPreview
+          ? "repeat(auto-fit, minmax(360px, 1fr))"
+          : "minmax(0, 1fr)",
+        gap: 16,
+        alignItems: "start",
+      }}
+    >
       <Paper
         shadow="xs"
         p="xl"
-        maw={768}
-        style={{ display: "block", margin: "0 auto" }}
+        maw={renderPreview ? undefined : 768}
+        style={{ display: "block", margin: renderPreview ? undefined : "0 auto" }}
       >
         {formTemplate.map((field) => {
           let type = field.type ?? "text";
@@ -101,6 +112,7 @@ export const FillFormStep: React.FC<Props> = ({
 
           return (
             <Input.Wrapper
+              key={field.key}
               description={field.key}
               style={{ marginTop: "1rem", marginBottom: "1rem" }}
             >
@@ -111,6 +123,7 @@ export const FillFormStep: React.FC<Props> = ({
                       placeholder={field.placeholder}
                       value={formData[field.key]}
                       variant={field.placeholder ? undefined : "filled"}
+                      readOnly={field.readonly}
                       onChange={(e) => {
                         setFormData(
                           updateData(field.key, e.target.value, formData)
@@ -122,6 +135,7 @@ export const FillFormStep: React.FC<Props> = ({
                     <Textarea
                       placeholder={field.placeholder}
                       value={formData[field.key]}
+                      readOnly={field.readonly}
                       onChange={(e) => {
                         setFormData(
                           updateData(field.key, e.target.value, formData)
@@ -166,6 +180,8 @@ export const FillFormStep: React.FC<Props> = ({
           );
         })}
       </Paper>
+
+      {renderPreview && <div>{renderPreview(formData)}</div>}
     </div>
   );
 };

@@ -8,10 +8,11 @@ import IDBStorage from "idbstorage";
 import { SelectContractStep } from "../steps/SelectContractStep";
 import { FillFormStep } from "../steps/FillFormStep";
 import { formTemplate } from "../formTemplates/NewContractFormTemplate";
-import { PDFFillStep } from "../steps/PDFFillStep";
-import contractTemplate from "../pdfTemplates/contractTemplate2026.json";
 import { NoDataStep } from "../steps/NoDataStep";
 import { ExportAndSaveStep } from "../steps/ExportAndSaveStep";
+import { ContractPreviewStep } from "../steps/ContractPreviewStep";
+import { ContractHtmlPreview } from "../components/ContractHtmlPreview";
+import { AGENCY_STORAGE_KEY } from "../components/agency";
 
 const storage = new IDBStorage();
 
@@ -22,6 +23,9 @@ export const NewContractPage = () => {
   const [baseContract, setBaseContract] = React.useState({});
   const [contractNo, setContractNo] = React.useState<string>("");
   const [firstComputed, setFirstComputed] = React.useState(false);
+  const [selectedAgency, setSelectedAgency] = React.useState<string>(() => {
+    return localStorage.getItem(AGENCY_STORAGE_KEY) ?? "";
+  });
 
   React.useEffect(() => {
     if (!firstComputed) {
@@ -90,15 +94,21 @@ export const NewContractPage = () => {
               setCurrentOut(_formData);
             }}
             inputJson={formData}
+            renderPreview={(liveFormData) => (
+              <ContractHtmlPreview
+                contract={liveFormData}
+                selectedAgency={selectedAgency}
+                showActions={false}
+                minHeight={1200}
+              />
+            )}
           />
         </Stepper.Step>
-        <Stepper.Step label="Al treilea pas" description="Descarca PDF">
-          <PDFFillStep
+        <Stepper.Step label="Al treilea pas" description="Previzualizează contractul HTML">
+          <ContractPreviewStep
             inputJson={currentOut}
-            pdfTemplate={contractTemplate}
-            onOutputJson={(_) => {
-              // do nothing
-            }}
+            selectedAgency={selectedAgency}
+            onAgencyChange={setSelectedAgency}
           />
         </Stepper.Step>
         <Stepper.Step label="Al patrulea pas" description="Confirma salvarea">
