@@ -15,6 +15,7 @@ interface Agency {
   address: string;
   weekdayHours: string;
   weekendHours: string;
+  phone: string;
 }
 
 const AGENCIES: Agency[] = [
@@ -23,16 +24,57 @@ const AGENCIES: Agency[] = [
     address: "Str. Calea lui Traian, nr. 2, Ap. 2",
     weekdayHours: "Luni-Vineri 08:00 - 16:00",
     weekendHours: "Sambata 10:00 - 13:00",
+    phone: "0256/373513",
   },
   {
     name: "S.C. DOGAR IFN S.R.L. - Victor Babes - Casieria 1",
     address: "Str. Victor Babes nr. 23",
     weekdayHours: "Luni-Vineri 09:00 - 17:00",
     weekendHours: "Sambata 10:00 - 13:00",
+    phone: "0256/373513",
   },
 ];
 
 const STORAGE_KEY = "selected_agency";
+
+const NUMERIC_IDENTIFIER_FIELDS = new Set([
+  "CNP",
+  "BENEFICIAR INCASARE CNP",
+  "NR CI",
+  "NR CI1",
+  "BENEFICIAR INCASARE NR CI",
+]);
+
+const normalizePdfValue = (key: string, value: unknown): string => {
+  if (value === undefined || value === null) return "";
+
+  const rawValue = String(value).trim();
+  if (!rawValue) return "";
+
+  if (NUMERIC_IDENTIFIER_FIELDS.has(key)) {
+    if (/^[+-]?\d+(?:\.0+)?$/.test(rawValue)) {
+      return rawValue.replace(/\.0+$/, "");
+    }
+
+    if (/^[+-]?\d+(?:\.\d+)?e[+-]?\d+$/i.test(rawValue)) {
+      const numericValue = Number(rawValue);
+      if (Number.isFinite(numericValue)) {
+        return Math.trunc(numericValue).toLocaleString("en-US", {
+          useGrouping: false,
+        });
+      }
+    }
+  }
+
+  if (typeof value === "number") {
+    return Number.isInteger(value) ? value.toString() : String(value);
+  }
+
+  return rawValue;
+};
+
+const formatAgencyHours = (hours: string): string =>
+  hours.replace(/^Luni-Vineri\s*/i, "").replace(/^Sambata\s*/i, "").trim();
 
 export const PDFFillStep: React.FC<Props> = ({
   inputJson,
@@ -60,10 +102,9 @@ export const PDFFillStep: React.FC<Props> = ({
   React.useEffect(() => {
     const loadFonts = async () => {
       try {
-        // Load Source Sans Pro from Google Fonts - has full Romanian diacritic support
         const [regularResponse, boldResponse] = await Promise.all([
-          fetch("MyriadPro-Regular.ttf"),
-          fetch("MyriadPro-Regular.ttf"),
+          fetch("SourceSans3-Regular.ttf"),
+          fetch("SourceSans3-Bold.ttf"),
         ]);
 
         const [regularBuffer, boldBuffer] = await Promise.all([
@@ -75,9 +116,11 @@ export const PDFFillStep: React.FC<Props> = ({
           string,
           { data: ArrayBuffer; fallback?: boolean }
         > = {
-          SourceSansPro: { data: regularBuffer, fallback: true },
+          SourceSans3: { data: regularBuffer, fallback: true },
+          "SourceSans3-Bold": { data: boldBuffer },
+          SourceSansPro: { data: regularBuffer },
           "SourceSansPro-Bold": { data: boldBuffer },
-          // Add aliases for any other font names in your template
+          // Keep aliases so older templates still render if selected later.
           Roboto: { data: regularBuffer },
           "MyriadPro-Regular": { data: regularBuffer },
           "MyriadPro-Bold": { data: boldBuffer },
@@ -169,9 +212,12 @@ export const PDFFillStep: React.FC<Props> = ({
           if (fieldType === "rectangle") {
             // Rectangles don't take input, skip them
             return;
+          } else if (schema.readOnly && schema.content) {
+            // Static template text renders from the schema content.
+            return;
           } else if (fieldType === "multiVariableText") {
             // Check if we have data for this field
-            let value = row[key];
+            const value = normalizePdfValue(key, row[key]);
             if (value !== undefined && value !== null && value !== "") {
               // Try to parse if it's already JSON, otherwise create JSON
               try {
@@ -189,14 +235,7 @@ export const PDFFillStep: React.FC<Props> = ({
             }
           } else {
             // Regular text or other field types
-            let value = row[key] ?? "";
-
-            // Convert to string to preserve full numbers
-            if (typeof value === "number") {
-              value = value.toString();
-            }
-
-            inputs[key] = String(value);
+            inputs[key] = normalizePdfValue(key, row[key]);
           }
         });
 
@@ -211,17 +250,19 @@ export const PDFFillStep: React.FC<Props> = ({
         }
         if (templateFieldsMap.has("PROGRAM LUNI VINERI")) {
           const fieldType = templateFieldsMap.get("PROGRAM LUNI VINERI").type;
+          const weekdayHours = formatAgencyHours(agency.weekdayHours);
           inputs["PROGRAM LUNI VINERI"] =
             fieldType === "multiVariableText"
-              ? JSON.stringify([{ text: agency.weekdayHours }])
-              : agency.weekdayHours;
+              ? JSON.stringify([{ text: weekdayHours }])
+              : weekdayHours;
         }
         if (templateFieldsMap.has("PROGRAM WEEKEND")) {
           const fieldType = templateFieldsMap.get("PROGRAM WEEKEND").type;
+          const weekendHours = formatAgencyHours(agency.weekendHours);
           inputs["PROGRAM WEEKEND"] =
             fieldType === "multiVariableText"
-              ? JSON.stringify([{ text: agency.weekendHours }])
-              : agency.weekendHours;
+              ? JSON.stringify([{ text: weekendHours }])
+              : weekendHours;
         }
         if (templateFieldsMap.has("ADRESA AGENTIE")) {
           const fieldType = templateFieldsMap.get("ADRESA AGENTIE").type;
@@ -229,6 +270,13 @@ export const PDFFillStep: React.FC<Props> = ({
             fieldType === "multiVariableText"
               ? JSON.stringify([{ text: agency.address }])
               : agency.address;
+        }
+        if (templateFieldsMap.has("TELEFON AGENTIE")) {
+          const fieldType = templateFieldsMap.get("TELEFON AGENTIE").type;
+          inputs["TELEFON AGENTIE"] =
+            fieldType === "multiVariableText"
+              ? JSON.stringify([{ text: agency.phone }])
+              : agency.phone;
         }
 
         return inputs;

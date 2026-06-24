@@ -16,7 +16,7 @@ export const formTemplate: IFormTemplate<any> = [
   {
     key: "DIN",
     triggers: ["DATA SCADENTA"],
-    pdfKeys: ["DIN1", "DIN2", "INCASARE DIN"],
+    pdfKeys: ["DIN1", "DIN2", "INCASARE DIN", "DISPOZITIE INCASARE DIN"],
     fn: (row, formData) => {
       let today = new Date();
       let dd = String(today.getDate());
@@ -28,13 +28,14 @@ export const formTemplate: IFormTemplate<any> = [
   },
   {
     key: "NUME",
-    pdfKeys: ["NUME1"],
+    pdfKeys: ["NUME1", "BENEFICIAR INCASARE"],
     export: {
       key: "NUME",
     },
   },
   {
     key: "CNP",
+    pdfKeys: ["BENEFICIAR INCASARE CNP"],
     export: {
       key: "CNP",
     },
@@ -124,12 +125,12 @@ export const formTemplate: IFormTemplate<any> = [
   },
   {
     key: "LEGITIMAT CU",
-    pdfKeys: ["LEGITIMAT CU1"],
+    pdfKeys: ["LEGITIMAT CU1", "BENEFICIAR INCASARE CI"],
     fn: (_) => "CI",
   },
   {
     key: "SERIE CI",
-    pdfKeys: ["SERIE CI1"],
+    pdfKeys: ["SERIE CI1", "BENEFICIAR INCASARE SERIA CI"],
     fn: (row, _) => {
       return row["ACT IDENTITATE"].split(".")[0].trim();
     },
@@ -142,7 +143,7 @@ export const formTemplate: IFormTemplate<any> = [
   },
   {
     key: "NR CI",
-    pdfKeys: ["NR CI1"],
+    pdfKeys: ["NR CI1", "BENEFICIAR INCASARE NR CI"],
     fn: (row, _) => {
       return row["ACT IDENTITATE"].split(".")[1].trim();
     },
@@ -185,12 +186,15 @@ export const formTemplate: IFormTemplate<any> = [
       "VALOARE IMPRUMUT1",
       "VALOARE IMPRUMUT2",
       "VALOARE IMPRUMUT3",
+      "VALOARE INCASARE",
+      "VALOARE INCASARE 1",
     ],
     placeholder: "Completeaza suma",
     triggers: [
       "SUMA DE RESTITUIT",
       "AM PLATIT SUMA DE",
       "VALOARE IMPRUMUT IN SCRIS",
+      "VALOARE INCASARE IN SCRIS",
     ],
     export: {
       key: "VALOARE IMPRUMUT - RON",
@@ -205,6 +209,7 @@ export const formTemplate: IFormTemplate<any> = [
   },
   {
     key: "VALOARE IMPRUMUT IN SCRIS",
+    pdfKeys: ["VALOARE INCASARE IN SCRIS"],
     fn: (row, formData) => {
       let value = parseFloat(row["VALOARE IMPRUMUT - RON"]);
       if (isNaN(value)) {
@@ -337,6 +342,10 @@ export const formTemplate: IFormTemplate<any> = [
   {
     key: "DISPOZITIE DE PLATA NUMARUL",
     placeholder: "Completeaza",
+  },
+  {
+    key: "DISPOZITIE INCASARE",
+    placeholder: "Completeaza dispozitia de incasare",
   },
 ] as const;
 
