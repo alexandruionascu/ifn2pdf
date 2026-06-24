@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -oE '\"name\":\"[^\"]*NUME[^\"]*\"[^}]{0,400}' /Users/alexandruionascu/Workspace/dogar_ifn/pdfTemplates/contractTemplate.json)",
+      "Bash(awk '/\"name\":|\"[A-Z]+\":/{print NR\": \"$0}' /Users/alexandruionascu/Workspace/dogar_ifn/pdfTemplates/contractTemplate.json)",
+      "Bash(node *)",
+      "Bash(grep -v \"Warning\\\\|polyfill\\\\|MODULE_VERSION\\\\|^\\\\s*$\")",
+      "Bash(yarn dev *)",
+      "Bash(yarn pdf:render)",
+      "Bash(yarn pdf:measure -- /tmp/sample-render.pdf --region 85,95)",
+      "Bash(npm run *)",
+      "Bash(firebase projects:list)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}
