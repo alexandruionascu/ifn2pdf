@@ -239,6 +239,12 @@ export const PDFFillStep: React.FC<Props> = ({
           }
         });
 
+        // Split CNP into 13 per-digit fields (CNP_1 .. CNP_13)
+        const cnpValue = String(row["CNP"] ?? "").replace(/\D/g, "").slice(0, 13);
+        for (let i = 0; i < 13; i++) {
+          inputs[`CNP_${i + 1}`] = cnpValue[i] ?? "";
+        }
+
         // Override with agency-related fields
         if (templateFieldsMap.has("DATA SI ORA")) {
           const fieldType = templateFieldsMap.get("DATA SI ORA").type;

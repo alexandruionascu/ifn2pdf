@@ -23,16 +23,16 @@
       {
         "type": "text",
         "position": {
-          "x": 177,
-          "y": 13.7
+          "x": 170,
+          "y": 13.55
         },
-        "width": 21,
-        "height": 4.8,
+        "width": 28,
+        "height": 5,
         "rotate": 0,
         "fontSize": 8.8,
         "fontColor": "#000000",
         "fontName": "SourceSans3",
-        "verticalAlignment": "bottom",
+        "verticalAlignment": "middle",
         "alignment": "center",
         "characterSpacing": 0,
         "lineHeight": 1,
@@ -42,16 +42,16 @@
       {
         "type": "text",
         "position": {
-          "x": 177,
-          "y": 18.9
+          "x": 170,
+          "y": 18.75
         },
-        "width": 21,
-        "height": 4.8,
+        "width": 28,
+        "height": 5,
         "rotate": 0,
         "fontSize": 8.8,
         "fontColor": "#000000",
         "fontName": "SourceSans3",
-        "verticalAlignment": "bottom",
+        "verticalAlignment": "middle",
         "alignment": "center",
         "characterSpacing": 0,
         "lineHeight": 1,
@@ -128,7 +128,7 @@
         "fontColor": "#000000",
         "fontName": "SourceSans3-Bold",
         "verticalAlignment": "bottom",
-        "alignment": "left",
+        "alignment": "center",
         "characterSpacing": 0,
         "lineHeight": 1,
         "name": "NUME",
@@ -137,20 +137,248 @@
       {
         "type": "text",
         "position": {
-          "x": 7.5,
+          "x": 14.676000000000002,
           "y": 87.6
         },
-        "width": 106.2,
-        "height": 5.8,
+        "width": 6,
+        "height": 6,
         "rotate": 0,
-        "fontSize": 8.7,
+        "fontSize": 9,
         "fontColor": "#000000",
         "fontName": "SourceSans3",
         "verticalAlignment": "middle",
         "alignment": "center",
-        "characterSpacing": 4.6,
+        "characterSpacing": 0,
         "lineHeight": 1,
-        "name": "CNP",
+        "name": "CNP_1",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 20.926000000000002,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_2",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 27.177,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_3",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 33.427,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_4",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 39.678,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_5",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 45.928,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_6",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 52.178,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_7",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 58.428999999999995,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_8",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 64.679,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_9",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 70.92999999999999,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_10",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 77.17999999999999,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_11",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 83.42999999999999,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_12",
+        "content": ""
+      },
+      {
+        "type": "text",
+        "position": {
+          "x": 89.681,
+          "y": 87.6
+        },
+        "width": 6,
+        "height": 6,
+        "rotate": 0,
+        "fontSize": 9,
+        "fontColor": "#000000",
+        "fontName": "SourceSans3",
+        "verticalAlignment": "middle",
+        "alignment": "center",
+        "characterSpacing": 0,
+        "lineHeight": 1,
+        "name": "CNP_13",
         "content": ""
       },
       {
@@ -510,7 +738,7 @@
         "verticalAlignment": "top",
         "alignment": "left",
         "characterSpacing": 0,
-        "lineHeight": 1.25,
+        "lineHeight": 2.13,
         "name": "GARANTII",
         "content": ""
       },
@@ -925,8 +1153,8 @@
         "fontSize": 8.2,
         "fontColor": "#000000",
         "fontName": "SourceSans3",
-        "verticalAlignment": "bottom",
-        "alignment": "left",
+        "verticalAlignment": "middle",
+        "alignment": "center",
         "characterSpacing": 0,
         "lineHeight": 1,
         "name": "VALOARE INCASARE IN SCRIS",
