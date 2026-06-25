@@ -9,7 +9,6 @@ import { SelectContractStep } from "../steps/SelectContractStep";
 import { FillFormStep } from "../steps/FillFormStep";
 import { formTemplate } from "../formTemplates/NewContractFormTemplate";
 import { PDFFillStep } from "../steps/PDFFillStep";
-import contractTemplate from "../pdfTemplates/contractTemplate2026.json";
 import { NoDataStep } from "../steps/NoDataStep";
 import { ExportAndSaveStep } from "../steps/ExportAndSaveStep";
 
@@ -95,7 +94,6 @@ export const NewContractPage = () => {
         <Stepper.Step label="Al treilea pas" description="Descarca PDF">
           <PDFFillStep
             inputJson={currentOut}
-            pdfTemplate={contractTemplate}
             onOutputJson={(_) => {
               // do nothing
             }}

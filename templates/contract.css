@@ -1,0 +1,286 @@
+/* Contract de împrumut cu amanet — base template styles.
+   Page: A4 portrait. Content area: 188mm × 276.3mm centered (11mm horizontal / 10.35mm vertical margin).
+   Designed to fit on a single page. Adjust line-height / table padding if you add content. */
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, "Liberation Sans", sans-serif;
+  font-size: 8.7pt;
+  line-height: 1.2;
+  color: #000;
+  background: #fff;
+}
+
+.page {
+  width: 188mm;
+  min-height: 297mm;
+  padding: 7mm 11mm 0 11mm;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7mm;
+}
+
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  min-height: 28mm;
+}
+
+.company-block {
+  width: 92mm;
+  padding-top: 1mm;
+}
+
+.company-block h2 {
+  margin: 0 0 2mm 0;
+  font-size: 14pt;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.2pt;
+}
+
+.company-block p {
+  margin: 0 0 1.6mm 0;
+  font-size: 8.8pt;
+  line-height: 1.05;
+  min-height: 3.2mm;
+}
+
+.hours-box {
+  width: 49mm;
+  border: 0.7pt solid #000;
+  padding: 3mm 4mm 2.4mm 4mm;
+}
+
+.hours-box h3 {
+  margin: 0 0 3mm 0;
+  font-size: 9pt;
+  line-height: 1;
+  text-align: center;
+  font-weight: 700;
+}
+
+.hours-row {
+  display: grid;
+  grid-template-columns: 18mm 1fr;
+  column-gap: 3mm;
+  align-items: baseline;
+  margin-bottom: 2mm;
+  font-size: 8.2pt;
+}
+
+.hours-row strong {
+  display: block;
+  min-height: 3.2mm;
+  border-bottom: 0.5pt solid #000;
+  text-align: center;
+  font-size: 8.3pt;
+  line-height: 3.2mm;
+}
+
+.title {
+  font-size: 16pt;
+  font-weight: 700;
+  text-align: center;
+  margin: 5mm 0 5mm 0;
+  letter-spacing: 0.4pt;
+}
+
+.line {
+  margin: 0;
+  padding: 0;
+  font-size: 9pt;
+}
+
+.line.indent {
+  margin-left: 5mm;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 1.5mm;
+  margin: 0;
+}
+
+.boxed-row {
+  justify-content: center;
+  gap: 4mm;
+  margin: 0 0 3.5mm 0;
+  align-items: center;
+}
+
+.label {
+  white-space: nowrap;
+}
+
+.label.center {
+  flex: 1;
+  text-align: center;
+}
+
+/* Inline fill-in-the-blank field: a thin underline, height tracks line height. */
+.field {
+  display: inline-block;
+  min-width: 8mm;
+  border-bottom: 0.4pt solid #000;
+  padding: 0 1mm;
+  height: 4mm;
+  line-height: 4mm;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.boxed-field {
+  border: 0.7pt solid #000;
+  height: 6mm;
+  line-height: 6mm;
+  font-size: 12pt;
+  font-weight: 700;
+  text-align: center;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.field.small {
+  min-width: 10mm;
+}
+
+.field.wide {
+  min-width: 80mm;
+}
+
+.field.bold {
+  font-weight: 700;
+  font-size: 10pt;
+}
+
+.field.center {
+  display: inline-block;
+  text-align: center;
+}
+
+.field.underline {
+  border-bottom: 0.4pt solid #000;
+}
+
+/* CNP — 13 evenly-sized single-digit cells in a row. */
+.cnp-row {
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  gap: 0.4mm;
+  margin: 1mm 0;
+  max-width: 90mm;
+}
+
+.cnp-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5mm;
+  border: 0.4pt solid #000;
+  font-size: 9pt;
+  line-height: 1;
+}
+
+/* Tabular grids for value tables. */
+table.grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0;
+  table-layout: fixed;
+}
+
+table.grid th,
+table.grid td {
+  border: 0.6pt solid #000;
+  padding: 1mm 1.5mm;
+  font-size: 8.5pt;
+  text-align: center;
+  vertical-align: middle;
+  height: 6mm;
+}
+
+table.grid .field {
+  width: 100%;
+  min-width: 0;
+}
+
+table.grid th {
+  font-weight: 700;
+  background: #fff;
+  height: 7mm;
+}
+
+table.grid.prelungire th {
+  font-size: 7.5pt;
+  line-height: 1.1;
+  padding: 0.5mm;
+  height: 8mm;
+}
+
+/* GARANTII — 5 ruled lines, like a paper-form description block. */
+.garantii {
+  margin: 0 0 1mm 0;
+  padding: 0;
+  font-size: 9pt;
+  line-height: 5.6mm;
+  border-top: 0.45pt solid #000;
+  border-bottom: 0.45pt solid #000;
+  background-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000);
+  background-repeat: no-repeat;
+  background-size: 100% 0.45pt;
+  background-position:
+    0 5.6mm,
+    0 11.2mm,
+    0 16.8mm,
+    0 22.4mm;
+  min-height: 28mm;
+  width: 100%;
+}
+
+/* Section spacing. */
+.plat-row,
+.inc-row {
+  margin-top: 2mm;
+}
+
+.signature-row {
+  margin-top: 1.5mm;
+  gap: 2mm;
+  align-items: flex-end;
+}
+
+.debtor-row {
+  justify-content: center;
+  gap: 4mm;
+}
+
+.client-sign-row {
+  justify-content: flex-end;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 1mm;
+  text-align: center;
+  font-size: 8pt;
+  font-style: italic;
+}

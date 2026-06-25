@@ -11,19 +11,21 @@ export const formTemplate: IFormTemplate<any> = newContractFormTemplate
   .concat([
     {
       key: "DATA INCEPERII PRELUNGIRII",
+      pdfKeys: ["DATA PRELUNGIRII"],
     },
     {
       key: "NR ZILE",
+      pdfKeys: ["NR ZILE PREL"],
     },
     {
       key: "DATA RESTITUIRII",
+      pdfKeys: ["DATA RESTITUIRII PRELUNGIRE"],
     },
     {
       key: "VALOARE COMISION",
+      pdfKeys: ["VALOARE COMISION PREL"],
     },
     {
       key: "BANI ADUSI",
     },
   ]);
-
-
