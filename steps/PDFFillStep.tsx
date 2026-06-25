@@ -239,8 +239,15 @@ export const PDFFillStep: React.FC<Props> = ({
           }
         });
 
-        // Split CNP into 13 per-digit fields (CNP_1 .. CNP_13)
-        const cnpValue = String(row["CNP"] ?? "").replace(/\D/g, "").slice(0, 13);
+        // Split CNP into 13 per-digit fields (CNP_1 .. CNP_13). Some imported
+        // rows already carry the complete value in the beneficiary PDF key.
+        const debtorCnp = normalizePdfValue("CNP", row["CNP"]).replace(/\D/g, "");
+        const beneficiaryCnp = normalizePdfValue(
+          "BENEFICIAR INCASARE CNP",
+          row["BENEFICIAR INCASARE CNP"],
+        ).replace(/\D/g, "");
+        const cnpValue = (debtorCnp.length >= 13 ? debtorCnp : beneficiaryCnp)
+          .slice(0, 13);
         for (let i = 0; i < 13; i++) {
           inputs[`CNP_${i + 1}`] = cnpValue[i] ?? "";
         }

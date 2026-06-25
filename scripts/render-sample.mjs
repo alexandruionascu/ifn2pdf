@@ -86,6 +86,10 @@ const sample = {
   "SUMA PLATITA LEI": "600",
   "SUMA PRIMITĂ LEI": "600",
   "AM PRIMIT SUMA DE LEI": "600",
+  "ADRESA AGENTIE": "Str. Victor Babes nr. 23",
+  "PROGRAM LUNI VINERI": "09:00 - 17:00",
+  "PROGRAM WEEKEND": "10:00 - 13:00",
+  "TELEFON AGENTIE": "0256/373513",
 };
 
 // Same CNP split that PDFFillStep.tsx applies per row.
