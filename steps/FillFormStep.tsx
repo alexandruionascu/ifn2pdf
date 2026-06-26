@@ -59,7 +59,7 @@ export const FillFormStep: React.FC<Props> = ({
     if (field.triggers) {
       for (let triggerKey of field.triggers) {
         let triggerField = formTemplate.find((x) => x.key == triggerKey);
-        if (triggerField.fn) {
+        if (triggerField?.fn) {
           let result;
           try {
             result = triggerField.fn(newFormData, {});

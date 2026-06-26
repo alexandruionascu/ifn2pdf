@@ -148,22 +148,27 @@
         <span class="field underline" data-field="CLIENT_PLATA" style="width: 50mm"></span>
       </p>
 
-      <!-- Disp. de încasare — NO client identification block per spec.
-           Only the receipt number/date + sum stay. -->
+      <!-- Disp. de încasare — toate câmpurile rămân necompletate pentru completare manuală. -->
       <p class="row inc-row">
         <span class="label"><strong>Disp. de încasare nr.</strong></span>
         <span class="field small" data-field="DISPOZITIE INCASARE"></span>
         <span class="label"><strong>din</strong></span>
         <span class="field small" data-field="DISPOZITIE INCASARE DIN"></span>
-        <span class="label">. Am încasat suma de</span>
-        <span class="field small" data-field="VALOARE INCASARE"></span>
-        <span class="label">Lei</span>
+        <span class="field" data-field="BENEFICIAR INCASARE" style="width: 55mm"></span>
       </p>
       <p class="line">
+        CNP <span class="field small" data-field="BENEFICIAR INCASARE CNP"></span>,
+        <span class="field small" data-field="BENEFICIAR INCASARE CI"></span>
+        seria <span class="field small" data-field="BENEFICIAR INCASARE SERIA CI"></span>,
+        nr. <span class="field small" data-field="BENEFICIAR INCASARE NR CI"></span>.
         Reprezentând valoarea contractului nr.
         <span class="field small" data-field="INCASARE NR CONTRACT"></span>
         din <span class="field small" data-field="INCASARE DIN"></span>.
-        adică <span class="field" data-field="VALOARE INCASARE IN SCRIS" style="width: 90mm"></span>
+      </p>
+      <p class="line">
+        Am încasat suma de
+        <span class="field small" data-field="VALOARE INCASARE"></span> Lei,
+        adică <span class="field" data-field="VALOARE INCASARE IN SCRIS" style="width: 60mm"></span>
       </p>
       <p class="row signature-row">
         <span class="label">Semnătură casier</span>

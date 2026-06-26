@@ -12,6 +12,25 @@ const NUMERIC_IDENTIFIER_FIELDS = new Set([
   "NR CI1",
 ]);
 
+// Dispoziția de încasare + personal-info slots are intentionally left blank
+// for handwriting on the printed contract. Form values still exist in formData
+// (e.g. DISPOZITIE INCASARE receipt nr) but never reach the PDF.
+const BLANK_FOR_HANDWRITING = new Set([
+  "DISPOZITIE INCASARE",
+  "DISPOZITIE INCASARE DIN",
+  "BENEFICIAR INCASARE",
+  "BENEFICIAR INCASARE CNP",
+  "BENEFICIAR INCASARE CI",
+  "BENEFICIAR INCASARE SERIA CI",
+  "BENEFICIAR INCASARE NR CI",
+  "VALOARE INCASARE",
+  "VALOARE INCASARE IN SCRIS",
+  "INCASARE NR CONTRACT",
+  "INCASARE DIN",
+  "CASIER_INCASARE",
+  "CLIENT_INCASARE",
+]);
+
 function normalizeValue(key: string, value: unknown): string {
   if (value === undefined || value === null) return "";
   const raw = String(value).trim();
@@ -74,17 +93,13 @@ function resolveRow(row: RowInput, agency: Agency): Record<string, string> {
   out["SUMA RESTITUIT PRELUNGIRE"] =
     out["SUMA RESTITUIT PRELUNGIRE"] || out["SUMA DE RESTITUIT PRELUNGIRE"] || out["SUMA DE RESTITUIT"] || "";
 
-  // Receipt block no longer carries client identity; only the amount mirrors
-  // the payment/loan amount when no distinct receipt fields are provided.
-  out["VALOARE INCASARE"] =
-    out["VALOARE INCASARE"] || out["VALOARE IMPRUMUT2"] || out["VALOARE IMPRUMUT"] || "";
-  out["VALOARE INCASARE IN SCRIS"] =
-    out["VALOARE INCASARE IN SCRIS"] || out["VALOARE IMPRUMUT IN SCRIS"] || "";
-
   // CNP 13-cell split — preserve pdfme fallback chain.
   const debtorCnp = (out["CNP"] ?? "").replace(/\D/g, "");
   const cnpValue = debtorCnp.slice(0, 13);
   for (let i = 0; i < 13; i++) out[`CNP_${i + 1}`] = cnpValue[i] ?? "";
+
+  // Strip receipt + personal-info slots — they stay blank for handwriting.
+  for (const key of BLANK_FOR_HANDWRITING) out[key] = "";
 
   return out;
 }
