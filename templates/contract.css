@@ -217,6 +217,7 @@ table.grid td {
 table.grid .field {
   width: 100%;
   min-width: 0;
+  border-bottom: none;
 }
 
 table.grid th {
@@ -232,29 +233,45 @@ table.grid.prelungire th {
   height: 8mm;
 }
 
-/* GARANTII — 5 ruled lines, like a paper-form description block. */
-.garantii {
+/* GARANTII — 6 ruled lines for handwriting, drawn with explicit <hr> elements
+   (replaces the previous CSS background-gradient hack, which the headless
+   Chrome → PDF pipeline did not always render). The text overlay is bottom-
+   anchored by the renderer, so the last line of text sits on the bottom rule. */
+.garantii-box {
+  position: relative;
+  height: 28mm;
   margin: 0 0 1mm 0;
+  padding: 0;
+  width: 100%;
+}
+.garantii-box > .garantii {
+  position: absolute;
+  inset: 0;
+  margin: 0;
   padding: 0;
   font-size: 9pt;
   line-height: 5.6mm;
-  border-top: 0.45pt solid #000;
-  border-bottom: 0.45pt solid #000;
-  background-image:
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000);
-  background-repeat: no-repeat;
-  background-size: 100% 0.45pt;
-  background-position:
-    0 5.6mm,
-    0 11.2mm,
-    0 16.8mm,
-    0 22.4mm;
-  min-height: 28mm;
-  width: 100%;
+  background: transparent;
+  z-index: 2;
+  white-space: pre-wrap;
 }
+.garantii-box > .garantii-rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-top: 0.45pt solid #000;
+  height: 0;
+  z-index: 1;
+}
+.garantii-box > .garantii-rule:nth-of-type(2) { top: 0; }
+.garantii-box > .garantii-rule:nth-of-type(3) { top: 5.6mm; }
+.garantii-box > .garantii-rule:nth-of-type(4) { top: 11.2mm; }
+.garantii-box > .garantii-rule:nth-of-type(5) { top: 16.8mm; }
+.garantii-box > .garantii-rule:nth-of-type(6) { top: 22.4mm; }
+.garantii-box > .garantii-rule:nth-of-type(7) { top: calc(28mm - 0.45pt); }
 
 /* Section spacing. */
 .plat-row,
@@ -269,12 +286,8 @@ table.grid.prelungire th {
 }
 
 .debtor-row {
-  justify-content: center;
+  justify-content: flex-start;
   gap: 4mm;
-}
-
-.client-sign-row {
-  justify-content: flex-end;
 }
 
 .footer {

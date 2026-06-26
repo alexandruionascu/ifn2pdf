@@ -22,6 +22,7 @@ export const PDFFillStep: React.FC<Props> = ({ inputJson, onOutputJson }) => {
   const [assets, setAssets] = React.useState<{
     basePdf: Uint8Array;
     fonts: { regular: ArrayBuffer; bold: ArrayBuffer };
+    images: Record<string, ArrayBuffer>;
   } | null>(null);
 
   const [selectedAgency, setSelectedAgency] = React.useState<string>(() => {
@@ -89,6 +90,7 @@ export const PDFFillStep: React.FC<Props> = ({ inputJson, onOutputJson }) => {
       agency,
       basePdfBytes: assets.basePdf,
       fonts: assets.fonts,
+      images: assets.images,
     })
       .then((bytes) => {
         const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });

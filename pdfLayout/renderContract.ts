@@ -1,9 +1,9 @@
 import { PDFDocument } from "pdf-lib";
 // @ts-expect-error — @pdf-lib/fontkit has no published types in this version.
 import fontkit from "@pdf-lib/fontkit";
-import { FIELDS } from "./contractLayout.ts";
+import { FIELDS, STAMP_FIELD } from "./contractLayout.ts";
 import { formatAgencyHours, type Agency } from "./agencies.ts";
-import { drawField } from "./drawField.ts";
+import { drawField, mmToPt } from "./drawField.ts";
 import type { RenderInput, RowInput } from "./types.ts";
 
 const NUMERIC_IDENTIFIER_FIELDS = new Set([
@@ -118,6 +118,7 @@ export async function renderContract({
   agency,
   basePdfBytes,
   fonts,
+  images,
 }: RenderInput): Promise<Uint8Array> {
   const templateDoc = await PDFDocument.load(basePdfBytes);
   const outputDoc = await PDFDocument.create();
@@ -127,6 +128,9 @@ export async function renderContract({
   const bold = await outputDoc.embedFont(fonts.bold, { subset: false });
   const fontsMap = { regular, bold };
 
+  const stampPngBytes = images?.[STAMP_FIELD.imageName ?? ""];
+  const stampImage = stampPngBytes ? await outputDoc.embedPng(stampPngBytes) : null;
+
   const rowsToRender = rows.length === 0 ? [{}] : rows;
 
   for (let i = 0; i < rowsToRender.length; i++) {
@@ -135,6 +139,15 @@ export async function renderContract({
 
     const pageHeightPt = copiedPage.getHeight();
     const inputs = resolveRow(rowsToRender[i], agency);
+
+    if (stampImage && STAMP_FIELD.imageName) {
+      copiedPage.drawImage(stampImage, {
+        x: mmToPt(STAMP_FIELD.x),
+        y: pageHeightPt - mmToPt(STAMP_FIELD.y + STAMP_FIELD.h),
+        width: mmToPt(STAMP_FIELD.w),
+        height: mmToPt(STAMP_FIELD.h),
+      });
+    }
 
     for (const field of FIELDS) {
       if (field.kind === "skip") continue;

@@ -135,7 +135,7 @@ function extractFieldsInPage() {
         font: fontFor(el),
         align: alignFor(el),
         valign: multiline ? "top" : isCnp || isBoxed || isTableField ? "middle" : isUnderline ? "bottom" : "bottom",
-        lineHeight: multiline ? 1.75 : 1,
+        lineHeight: multiline ? 1.764 : 1,
         multiline,
       };
     });

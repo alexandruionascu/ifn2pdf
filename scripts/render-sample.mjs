@@ -55,7 +55,7 @@ const sample = {
   "COMISION PROCENT ZI": "13",
   COMISION: "12",
   "SUMA DE RESTITUIT": "612",
-  GARANTII: "test-gr-test\ntest-gr-test\n",
+  GARANTII: "test-1-1\ntest-1-1\ntest-2-2\ntest-3-4",
   "DISPOZITIE DE PLATA NUMARUL": "123",
   DIN1: "24.6.2026",
   "NR CONTRACT": "2",
@@ -96,6 +96,7 @@ const pdfBytes = await renderContract({
   agency,
   basePdfBytes: assets.basePdf,
   fonts: assets.fonts,
+  images: assets.images,
 });
 
 fs.writeFileSync(args.out, Buffer.from(pdfBytes));

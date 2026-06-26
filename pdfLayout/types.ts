@@ -1,7 +1,7 @@
 export type FontKey = "regular" | "bold";
 export type AlignKey = "left" | "center" | "right";
 export type VAlignKey = "top" | "middle" | "bottom";
-export type FieldKind = "text" | "signature" | "skip";
+export type FieldKind = "text" | "signature" | "image" | "skip";
 
 export interface Field {
   name: string;
@@ -16,6 +16,7 @@ export interface Field {
   valign: VAlignKey;
   lineHeight?: number;
   multiline?: boolean;
+  imageName?: string;
 }
 
 export interface Agency {
@@ -36,6 +37,7 @@ export interface RenderInput {
     regular: ArrayBuffer;
     bold: ArrayBuffer;
   };
+  images: Record<string, ArrayBuffer>;
 }
 
 export interface LoadedAssets {
@@ -44,4 +46,5 @@ export interface LoadedAssets {
     regular: ArrayBuffer;
     bold: ArrayBuffer;
   };
+  images: Record<string, ArrayBuffer>;
 }
