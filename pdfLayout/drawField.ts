@@ -95,7 +95,8 @@ export function drawField(
     const lineHeightPt = size * (field.lineHeight ?? 1.2);
     const maxLines = Math.max(1, Math.floor(mmToPt(field.h) / lineHeightPt));
     const lines = wrapText(value, font, size, wPt).slice(0, maxLines);
-    const firstBaseline = baselineY(field, pageHeightPt);
+    const topY = pageHeightPt - mmToPt(field.y);
+    const firstBaseline = topY - (lineHeightPt / 2 + size * 0.25);
     lines.forEach((line, i) => {
       const lx = alignX(field, font, line, size);
       page.drawText(line, {
