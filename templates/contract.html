@@ -93,6 +93,9 @@
       </p>
 
       <table class="grid">
+        <colgroup>
+          <col><col style="width: 14mm"><col><col><col><col>
+        </colgroup>
         <thead>
           <tr>
             <th>Valoare împrumut</th>
@@ -120,12 +123,6 @@
       </p>
       <div class="garantii-box">
         <p class="garantii" data-field="GARANTII"></p>
-        <hr class="garantii-rule" aria-hidden="true"/>
-        <hr class="garantii-rule" aria-hidden="true"/>
-        <hr class="garantii-rule" aria-hidden="true"/>
-        <hr class="garantii-rule" aria-hidden="true"/>
-        <hr class="garantii-rule" aria-hidden="true"/>
-        <hr class="garantii-rule" aria-hidden="true"/>
       </div>
 
       <p class="row plat-row">
@@ -153,10 +150,10 @@
         <span class="label">Lei</span>
       </p>
       <p class="row signature-row">
-        <span class="label">Semnătură casier</span>
-        <span class="field underline" data-field="CASIER_PLATA" style="width: 50mm"></span>
-        <span class="label center">Semnătură client</span>
-        <span class="field underline" data-field="CLIENT_PLATA" style="width: 50mm"></span>
+        <span class="label signature-label">Semnătură casier</span>
+        <span class="signature-box" data-field="CASIER_PLATA" style="width: 50mm"></span>
+        <span class="label signature-label center">Semnătură client</span>
+        <span class="signature-box" data-field="CLIENT_PLATA" style="width: 50mm"></span>
       </p>
 
       <!-- Disp. de încasare — doar suma (numeric + în scris) se precompletează; restul rămâne pentru pix. -->
@@ -182,18 +179,21 @@
         adică <span class="field" data-field="VALOARE INCASARE IN SCRIS" style="width: 60mm"></span>
       </p>
       <p class="row signature-row">
-        <span class="label">Semnătură casier</span>
-        <span class="field underline" data-field="CASIER_INCASARE" style="width: 50mm"></span>
-        <span class="label center">Semnătură client</span>
-        <span class="field underline" data-field="CLIENT_INCASARE" style="width: 50mm"></span>
+        <span class="label signature-label">Semnătură casier</span>
+        <span class="signature-box" data-field="CASIER_INCASARE" style="width: 50mm"></span>
+        <span class="label signature-label center">Semnătură client</span>
+        <span class="signature-box" data-field="CLIENT_INCASARE" style="width: 50mm"></span>
       </p>
       <p class="row signature-row debtor-row">
-        <span class="label">DEBITOR,</span>
-        <span class="field underline" data-field="DEBITOR_SIG" style="width: 50mm"></span>
+        <span class="label signature-label">DEBITOR,</span>
+        <span class="signature-box" data-field="DEBITOR_SIG" style="width: 50mm"></span>
       </p>
 
       <p class="line">Prelungirea contractului se face cu acordul părților în următoarele condiții:</p>
       <table class="grid prelungire">
+        <colgroup>
+          <col><col style="width: 13mm"><col><col><col><col><col><col>
+        </colgroup>
         <thead>
           <tr>
             <th>Data începerii prelungirii</th>

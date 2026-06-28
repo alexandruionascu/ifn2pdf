@@ -92,17 +92,38 @@ export function drawField(
   const size = field.fontSize;
 
   if (field.multiline) {
-    const lineHeightPt = size * (field.lineHeight ?? 1.2);
-    const maxLines = Math.max(1, Math.floor(mmToPt(field.h) / lineHeightPt));
-    const lines = wrapText(value, font, size, wPt).slice(0, maxLines);
-    const topY = pageHeightPt - mmToPt(field.y);
-    const firstBaseline = topY - (lineHeightPt / 2 + size * 0.25);
+    // Garantii box: draw 6 ruled lines + up to 5 text lines, bottom-anchored.
+    // Both lines and text come from the same coordinate math → always aligned.
+    const TARGET_LINES = 5;
+    const boxHPt = mmToPt(field.h);
+    const lineSpacingPt = boxHPt / TARGET_LINES;
+    const autoSize = Math.round(Math.min(size, lineSpacingPt * 0.65) * 10) / 10;
+    const leftPt = mmToPt(field.x);
+    const rightPt = leftPt + mmToPt(field.w);
+    const bottomY = pageHeightPt - mmToPt(field.y + field.h);
+
+    // Draw the 6 ruled lines (top to bottom of box)
+    for (let r = 0; r <= TARGET_LINES; r++) {
+      const ly = bottomY + r * lineSpacingPt;
+      page.drawLine({
+        start: { x: leftPt, y: ly },
+        end: { x: rightPt, y: ly },
+        thickness: 0.3,
+        color: rgb(0, 0, 0),
+      });
+    }
+
+    // Draw text lines top-to-bottom, baselines on the ruled lines
+    const allLines = wrapText(value, font, autoSize, mmToPt(field.w));
+    const lines = allLines.slice(0, TARGET_LINES);
+    while (lines.length < TARGET_LINES) lines.push("");
     lines.forEach((line, i) => {
-      const lx = alignX(field, font, line, size);
+      const lx = alignX(field, font, line, autoSize);
+      // i=0 → top rule, i=4 → bottom rule
       page.drawText(line, {
         x: lx,
-        y: firstBaseline - i * lineHeightPt,
-        size,
+        y: bottomY + (TARGET_LINES - 1 - i) * lineSpacingPt + 1.5,
+        size: autoSize,
         font,
         color: rgb(0, 0, 0),
       });

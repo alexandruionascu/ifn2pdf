@@ -121,6 +121,7 @@ function extractFieldsInPage() {
       const multiline = el.classList.contains("garantii");
       const isCnp = el.classList.contains("cnp-cell");
       const isBoxed = el.classList.contains("boxed-field");
+      const isSigBox = el.classList.contains("signature-box");
       const isUnderline = el.classList.contains("underline");
       const isTableField = !!el.closest("table");
 
@@ -134,8 +135,8 @@ function extractFieldsInPage() {
         fontSize: isCnp ? 9 : fieldSize(el),
         font: fontFor(el),
         align: alignFor(el),
-        valign: multiline ? "top" : isCnp || isBoxed || isTableField ? "middle" : isUnderline ? "bottom" : "bottom",
-        lineHeight: multiline ? 1.764 : 1,
+        valign: multiline ? "bottom" : isCnp || isBoxed || isSigBox || isTableField ? "middle" : isUnderline ? "bottom" : "bottom",
+        lineHeight: 1,
         multiline,
       };
     });
@@ -176,6 +177,22 @@ function writeLayout(fields, inputName, outputPath) {
   out.push(`  }`);
   out.push(`  return out;`);
   out.push(`}`);
+  out.push(``);
+  out.push(`// Stamp overlay — kept out of FIELDS so the HTML extractor doesn't overwrite it.`);
+  out.push(`// Anchor matches the position the legacy base PDF used (x≈167–198mm, y≈137–180mm).`);
+  out.push(`export const STAMP_FIELD: Field = {`);
+  out.push(`  name: "STAMP",`);
+  out.push(`  kind: "image",`);
+  out.push(`  imageName: "stamp-dogar",`);
+  out.push(`  x: 172,`);
+  out.push(`  y: 145,`);
+  out.push(`  w: 31,`);
+  out.push(`  h: 31,`);
+  out.push(`  fontSize: 0,`);
+  out.push(`  font: "regular",`);
+  out.push(`  align: "left",`);
+  out.push(`  valign: "top",`);
+  out.push(`};`);
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, out.join("\n") + "\n");
