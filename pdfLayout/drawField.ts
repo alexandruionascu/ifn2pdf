@@ -41,7 +41,7 @@ function baselineY(field: Field, pageHeightPt: number): number {
     case "top":
       return topY - field.fontSize * 0.8;
     case "bottom":
-      return bottomY + field.fontSize * 0.32;
+      return bottomY + field.fontSize * 0.22;
     case "middle":
     default:
       return midY - field.fontSize * 0.3;

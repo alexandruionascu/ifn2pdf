@@ -132,7 +132,7 @@ function extractFieldsInPage() {
         y: round(rect.top / pxPerMm),
         w: round(rect.width / pxPerMm),
         h: round(rect.height / pxPerMm),
-        fontSize: isCnp ? 9 : fieldSize(el),
+        fontSize: fieldSize(el),
         font: fontFor(el),
         align: alignFor(el),
         valign: multiline ? "bottom" : isCnp || isBoxed || isSigBox || isTableField ? "middle" : isUnderline ? "bottom" : "bottom",
@@ -185,7 +185,7 @@ function writeLayout(fields, inputName, outputPath) {
   out.push(`  kind: "image",`);
   out.push(`  imageName: "stamp-dogar",`);
   out.push(`  x: 172,`);
-  out.push(`  y: 145,`);
+  out.push(`  y: 127,`);
   out.push(`  w: 31,`);
   out.push(`  h: 31,`);
   out.push(`  fontSize: 0,`);
