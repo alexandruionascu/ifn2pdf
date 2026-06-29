@@ -97,7 +97,7 @@ export function drawField(
     const TARGET_LINES = 5;
     const boxHPt = mmToPt(field.h);
     const lineSpacingPt = boxHPt / TARGET_LINES;
-    const autoSize = Math.round(Math.min(size, lineSpacingPt * 0.65) * 10) / 10;
+    const autoSize = Math.round(Math.min(size, lineSpacingPt * 0.9) * 10) / 10;
     const leftPt = mmToPt(field.x);
     const rightPt = leftPt + mmToPt(field.w);
     const bottomY = pageHeightPt - mmToPt(field.y + field.h);

@@ -117,7 +117,7 @@ html, body {
 }
 
 .boxed-row {
-  justify-content: center;
+  justify-content: flex-start;
   gap: 4mm;
   margin: 0 0 3.5mm 0;
   align-items: center;
@@ -150,9 +150,8 @@ html, body {
   line-height: 6.5mm;
   font-size: 12pt;
   font-weight: 700;
-  text-align: center;
-  padding-top: 0;
-  padding-bottom: 0;
+  text-align: left;
+  padding: 0 1.5mm;
 }
 
 .field.small {
@@ -208,10 +207,10 @@ table.grid th,
 table.grid td {
   border: 0.6pt solid #000;
   padding: 1mm 1.5mm;
-  font-size: 9pt;
+  font-size: 11pt;
   text-align: center;
   vertical-align: middle;
-  height: 6.5mm;
+  height: 7.5mm;
 }
 
 table.grid .field {
@@ -223,14 +222,14 @@ table.grid .field {
 table.grid th {
   font-weight: 700;
   background: #fff;
-  height: 7.5mm;
+  height: 8.5mm;
 }
 
 table.grid.prelungire th {
-  font-size: 6.5pt;
+  font-size: 7pt;
   line-height: 1.05;
   padding: 0.3mm;
-  height: 5mm;
+  height: 5.5mm;
 }
 
 table.grid.prelungire td {
@@ -243,7 +242,7 @@ table.grid.prelungire td {
    The HTML provides an empty box with a light border for the blank form. */
 .garantii-box {
   position: relative;
-  height: 18mm;
+  height: 20mm;
   margin: 0 0 1mm 0;
   padding: 0;
   width: 100%;

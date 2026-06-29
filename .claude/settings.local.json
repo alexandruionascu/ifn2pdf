@@ -77,7 +77,24 @@
       "Bash(yarn template:render)",
       "Bash(qlmanage -t -s 1500 -o /tmp/pdf-images/ public/contract-base.pdf)",
       "Bash(distill \"List modified/deleted source files \\(not node_modules, not dist\\). One line per file.\")",
-      "Bash(yarn install *)"
+      "Bash(yarn install *)",
+      "Bash(unzip -p \"/Users/alexandruionascu/Workspace/dogar_ifn/Contract de imprumut Ciobanu Doina.docx\" word/document.xml)",
+      "Bash(which pdftotext *)",
+      "Bash(which pdftoppm *)",
+      "Bash(which mutool *)",
+      "Bash(npx tsc *)",
+      "Bash(yarn pdf:extract)",
+      "Bash(yarn pdf:render --out /tmp/sample-render-comision-fix.pdf)",
+      "Bash(distill \"What changed in COMISION-related lines? Return only those lines, or 'no COMISION changes' if clean.\")",
+      "Bash(distill \"Return scripts section only, with build/deploy/firebase commands listed verbatim.\")",
+      "Bash(sips -s format png /tmp/sample-render.pdf --out /tmp/sample-render-page1.png)",
+      "Bash(gs -sDEVICE=png16m -r150 -dFirstPage=1 -dLastPage=1 -o /tmp/baseline-old-page1.png /Users/alexandruionascu/Workspace/dogar_ifn/public/baseline-old-base.pdf)",
+      "Bash(gs -sDEVICE=png16m -r150 -dFirstPage=1 -dLastPage=1 -o /tmp/dist-stamp.png /Users/alexandruionascu/Workspace/dogar_ifn/dist/test-render.pdf)",
+      "Bash(sips -g pixelHeight -g pixelWidth -g hasAlpha /Users/alexandruionascu/Workspace/dogar_ifn/public/stamp-dogar.png)",
+      "Bash(/usr/bin/sips -s format png sample-render.pdf --out sample-render.png)",
+      "Bash(/usr/bin/mdls -name kMDItemNumberOfPages -name kMDItemPageHeight -name kMDItemPageWidth public/contract-base.pdf)",
+      "Bash(md5 /Users/alexandruionascu/Workspace/dogar_ifn/dist/stamp-dogar.png /Users/alexandruionascu/Workspace/dogar_ifn/public/stamp-dogar.png)",
+      "Bash(/usr/bin/sips -s format png /tmp/sample-render.pdf --out /tmp/sample-render.png)"
     ]
   }
 }
