@@ -242,6 +242,20 @@ table.grid.prelungire td {
   font-size: 10pt;
 }
 
+/* Top loan table — bigger and bolder than the other grids. */
+table.grid.imprumut th,
+table.grid.imprumut td {
+  font-size: 16pt;
+  font-weight: 700;
+  height: 10mm;
+  padding: 0.6mm 1mm;
+}
+
+table.grid.imprumut th {
+  height: 10mm;
+  font-size: 14pt;
+}
+
 /* GARANTII — box for pawned items. Ruled lines and text are drawn by the
    pdf-lib overlay so they stay perfectly aligned regardless of box size.
    The HTML provides an empty box with a light border for the blank form. */
@@ -293,6 +307,14 @@ table.grid.prelungire td {
   line-height: 10mm;
   min-width: 50mm;
   vertical-align: baseline;
+}
+
+/* Signature box rendered as a thin underline only (no rectangle border). */
+.signature-box.underline-only {
+  border: 0;
+  border-bottom: 0.7pt solid #000;
+  height: 3mm;
+  line-height: 3mm;
 }
 
 /* Label for a signature box — bold and slightly larger. */

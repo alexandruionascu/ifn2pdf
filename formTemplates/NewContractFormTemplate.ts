@@ -5,7 +5,7 @@ import { IFieldTemplate, IFormTemplate } from "./IFormTemplate";
 export const formTemplate: IFormTemplate<any> = [
   {
     key: "NR CONTRACT",
-    pdfKeys: ["NR CONTRACT", "NR CONTRACT1"],
+    pdfKeys: ["NR CONTRACT", "NR CONTRACT1", "INCASARE NR CONTRACT"],
     export: {
       key: "NR. CONTRACT / DATA",
       fn: (row) => {
@@ -16,7 +16,7 @@ export const formTemplate: IFormTemplate<any> = [
   {
     key: "DIN",
     triggers: ["DATA SCADENTA"],
-    pdfKeys: ["DIN1", "DIN2"],
+    pdfKeys: ["DIN1", "DIN2", "INCASARE DIN"],
     fn: (row, formData) => {
       let today = new Date();
       let dd = String(today.getDate());
