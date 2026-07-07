@@ -1,5 +1,20 @@
 {
   "projects": {
     "default": "dogarifn"
+  },
+  "targets": {
+    "dogarifn": {
+      "hosting": {
+        "live": [
+          "dogarifn"
+        ],
+        "dev": [
+          "dogar-ifn-dev"
+        ],
+        "demo": [
+          "dogar-ifn-demo"
+        ]
+      }
+    }
   }
 }
